@@ -12,10 +12,21 @@ export function DGKRList() {
     return demonlist.find((level) => level.level_id === id) || null;
   }
 
+  // Sort levels by place
+  const sortedLevels = levelsList?.sort((a, b) => {
+    const aLevel = getDemonlistLevelById(a.levelId);
+    const bLevel = getDemonlistLevelById(b.levelId);
+
+    if (!aLevel || !bLevel) return 0;
+    const placeA = aLevel.place || 0;
+    const placeB = bLevel.place || 0;
+    return placeA - placeB;
+  });
+
   return (
     <ul className={styles.list}>
-      {levelsList
-        ?.map((level, index) => {
+      {(sortedLevels || [])
+        .map((level, index) => {
           const demonlistLevel = getDemonlistLevelById(level.levelId);
 
           if (!demonlistLevel) return;
