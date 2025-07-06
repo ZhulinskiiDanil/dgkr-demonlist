@@ -1,9 +1,13 @@
-import styles from './Header.module.css';
+'use client';
 
+import styles from './Header.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 export function Header() {
+  const { data: session } = useSession();
+
   return (
     <header className={styles.header}>
       <div className={styles.cw}>
@@ -29,6 +33,21 @@ export function Header() {
           </div>
           Demonlist
         </h1>
+
+        <div className={styles.auth}>
+          {session?.user ? (
+            <>
+              <span className={styles.username}>{session.user.name}</span>
+              <button onClick={() => signOut()} className={styles.button}>
+                Выйти
+              </button>
+            </>
+          ) : (
+            <button onClick={() => signIn('discord')} className={styles.button}>
+              Войти с Discord
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
