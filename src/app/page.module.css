@@ -37,21 +37,15 @@
   z-index: 0;
   position: relative;
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
   min-height: 100svh;
-
-  padding: 5rem 0;
+  padding: 5rem 1rem;
 }
 
 .main .wrapper {
   position: relative;
   width: 100%;
   max-width: 60rem;
-  padding: 0 1rem;
+  margin: 0 auto;
   box-sizing: content-box;
 }
 
