@@ -4,6 +4,7 @@ import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
 import type { DemonlistLevel, DGKRListLevel } from '@/shared/types/demonlist';
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
+import Link from 'next/link';
 
 export function DGKRListLevel({
   data,
@@ -36,6 +37,39 @@ export function DGKRListLevel({
           )}
         </div>
 
+        <div className={styles.victors}>
+          <h3>Victors – {data.victors.length}</h3>
+          <ul>
+            {(data.victors as ((typeof data.victors)['0'] | null)[])
+              .concat(...[null, null])
+              .slice(0, 3)
+              .map((victor, idx) => (
+                <li key={idx} style={{ '--index': idx } as React.CSSProperties}>
+                  {!victor && (
+                    <Link href="#" rel="noopener noreferrer">
+                      <span className={styles.place}>{idx + 1}</span>
+                      <span className={styles.username}>N/A</span>
+                    </Link>
+                  )}
+                  {victor && (
+                    <Link
+                      href={victor.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className={styles.place}>{idx + 1}</span>
+                      <span className={styles.username}>
+                        {victor.demonlistNick}
+                      </span>{' '}
+                      <span className={styles.percent}>
+                        ({victor.percent}%)
+                      </span>
+                    </Link>
+                  )}
+                </li>
+              ))}
+          </ul>
+        </div>
         <div className={styles.content}>
           <div className={styles.header}>
             <h2 className={styles.title}>{demonlistLevel.name}</h2>
@@ -68,23 +102,6 @@ export function DGKRListLevel({
             >
               🎵 Song
             </a>
-          </div>
-
-          <div className={styles.victors}>
-            <h3>Victors</h3>
-            <ul>
-              {data.victors.map((victor, idx) => (
-                <li key={idx}>
-                  <a
-                    href={victor.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {victor.demonlistNick} ({victor.percent}%)
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
