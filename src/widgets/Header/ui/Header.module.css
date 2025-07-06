@@ -1,0 +1,56 @@
+header.header {
+  position: sticky;
+  margin-top: 0;
+  top: 0;
+
+  padding: 1rem;
+  background: #000;
+  border-bottom: 1px solid #222;
+}
+
+header.header .cw {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1440px;
+  box-sizing: border-box;
+}
+
+header.header .logo {
+  border-radius: 50%;
+}
+
+header.header .title {
+  display: flex;
+  align-items: center;
+
+  font-size: 2.5rem;
+  font-weight: 600;
+  font-family: 'Roboto Flex', sans-serif;
+  font-style: normal;
+  text-align: center;
+  font-variation-settings:
+    'slnt' 0,
+    'GRAD' 0,
+    'XOPQ' 100,
+    'XTRA' 450,
+    'YOPQ' 75,
+    'YTAS' 650,
+    'YTDE' -150,
+    'YTFI' 650,
+    'YTLC' 450,
+    'YTUC' 650;
+
+  line-height: 1.25;
+  color: #f1f1f1;
+}
+
+header.header .image {
+  position: relative;
+  height: 1.125em;
+
+  aspect-ratio: 2.66 / 1;
+}
