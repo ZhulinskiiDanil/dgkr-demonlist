@@ -5,8 +5,9 @@ import './globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'Improved Deathtracker',
-  description: 'Improved Geometry Dash deathtracker',
+  title: 'DGKR Community / Official website',
+  description:
+    'DGKR Community - Official website of the geometry dash community',
 };
 
 export default function RootLayout({

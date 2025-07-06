@@ -1,12 +1,12 @@
 'use client';
 import styles from './page.module.css';
 
-import { useId, useMemo, useState } from 'react';
-import { parseLevelStats } from '@/shared/utils/parseLevelStats';
-import { findLevelByName } from '@/shared/utils/demonlist/findLevelByName';
-import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
+// import { useId, useMemo, useState } from 'react';
+// import { parseLevelStats } from '@/shared/utils/parseLevelStats';
+// import { findLevelByName } from '@/shared/utils/demonlist/findLevelByName';
+// import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
 
-import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
+// import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 
 import { Header } from '@/widgets/Header/ui';
 // import { Grid } from '@/shared/ui/Grid/ui';
