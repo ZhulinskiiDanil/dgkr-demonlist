@@ -1,6 +1,6 @@
 import styles from './DGKRList.module.css';
 
-import { GDKRListLevel } from '../GDKRListLevel/ui';
+import { DGKRListLevel } from '../DGKRListLevel/ui';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 
@@ -17,16 +17,17 @@ export function DGKRList() {
   return (
     <ul className={styles.list}>
       {levelsList
-        ?.map((level) => {
+        ?.map((level, index) => {
           const demonlistLevel = getDemonlistLevelById(level.levelId);
 
           if (!demonlistLevel) return;
 
           return (
-            <GDKRListLevel
+            <DGKRListLevel
               key={level.levelId}
               data={level}
               demonlistLevel={demonlistLevel}
+              place={index + 1}
             />
           );
         })

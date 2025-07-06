@@ -4,20 +4,20 @@
   border-radius: 10px;
   margin: 8px 0;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  overflow: hidden; /* Чтобы скругления работали */
 }
 
-.level:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+.row {
+  display: flex;
+  flex-direction: row;
 }
 
 .thumbnailWrapper {
-  width: 100%;
-  aspect-ratio: 16 / 5; /* Более узкий превью */
+  width: 180px; /* фиксированная ширина превью */
+  height: auto;
+  flex-shrink: 0;
   overflow: hidden;
   background-color: #2a2a2a;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
 }
 
 .thumbnail {
@@ -39,19 +39,37 @@
 }
 
 .content {
-  padding: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  margin-bottom: 8px;
 }
 
 .title {
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.places {
+  display: flex;
+  gap: 6px;
+}
+
+.importantPlace {
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
 }
 
 .place {
@@ -63,15 +81,15 @@
 
 .creator,
 .verifier {
-  padding: 0 12px;
   font-size: 0.9rem;
   color: #ccc;
+  margin: 4px 0;
 }
 
 .links {
   display: flex;
-  gap: 10px;
-  padding: 6px 12px;
+  gap: 8px;
+  margin: 6px 0;
 }
 
 .links a {
@@ -81,7 +99,7 @@
 }
 
 .victors {
-  padding: 6px 12px 10px 12px;
+  margin-top: 6px;
 }
 
 .victors h3 {
