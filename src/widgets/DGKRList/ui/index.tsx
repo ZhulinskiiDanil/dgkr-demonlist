@@ -8,8 +8,6 @@ export function DGKRList() {
   const { data: levelsList } = useDGKRListQuery();
   const { data: demonlist } = useDemonlistQuery();
 
-  console.log(levelsList);
-
   function getDemonlistLevelById(id: string | number) {
     return demonlist.find((level) => level.level_id === id) || null;
   }

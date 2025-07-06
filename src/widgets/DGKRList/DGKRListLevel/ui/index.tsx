@@ -2,6 +2,8 @@ import styles from './DGKRListLevel.module.css';
 
 import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
 import type { DemonlistLevel, DGKRListLevel } from '@/shared/types/demonlist';
+import { useSession } from 'next-auth/react';
+import clsx from 'clsx';
 
 export function DGKRListLevel({
   data,
@@ -12,10 +14,15 @@ export function DGKRListLevel({
   demonlistLevel: DemonlistLevel;
   place: number;
 }) {
+  const session = useSession();
   const thumbnailUrl = getLevelThumbnailById(demonlistLevel.level_id);
+  const username = session.data?.user?.name;
+  const isCompleted = data.victors.some(
+    (victor) => victor.discordTag === username
+  );
 
   return (
-    <li className={styles.level}>
+    <li className={clsx(styles.level, !isCompleted && styles.completed)}>
       <div className={styles.row}>
         <div className={styles.thumbnailWrapper}>
           {thumbnailUrl ? (
