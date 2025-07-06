@@ -22,7 +22,7 @@ export function DGKRListLevel({
   );
 
   return (
-    <li className={clsx(styles.level, !isCompleted && styles.completed)}>
+    <li className={clsx(styles.level, isCompleted && styles.completed)}>
       <div className={styles.row}>
         <div className={styles.thumbnailWrapper}>
           {thumbnailUrl ? (
