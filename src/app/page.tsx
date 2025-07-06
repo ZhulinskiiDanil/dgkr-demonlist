@@ -9,6 +9,7 @@ import styles from './page.module.css';
 // import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 
 import { Header } from '@/widgets/Header/ui';
+import { DGKRList } from '@/widgets/DGKRList/ui';
 // import { Grid } from '@/shared/ui/Grid/ui';
 // import { GridItem } from '@/shared/ui/GridItem/ui';
 // import { UIButton } from '@/shared/ui/Button/ui';
@@ -40,7 +41,9 @@ export default function Home() {
       )} */}
       <Header />
       <main className={styles.main}>
-        <div className={styles.wrapper}></div>
+        <div className={styles.wrapper}>
+          <DGKRList />
+        </div>
       </main>
     </div>
   );

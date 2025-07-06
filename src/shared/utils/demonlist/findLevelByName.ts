@@ -1,4 +1,4 @@
-import type { DemonlistLevel } from '@/shared/api/getDemonList';
+import type { DemonlistLevel } from '@/shared/types/demonlist';
 
 export function findLevelByName(
   levels: DemonlistLevel[],
