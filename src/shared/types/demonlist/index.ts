@@ -28,6 +28,7 @@ export type DGKRVictor = {
 };
 
 export type DGKRListLevel = {
+  name: string;
   levelId: number;
   victors: DGKRVictor[];
 };
