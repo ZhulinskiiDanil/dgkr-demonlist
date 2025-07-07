@@ -34,6 +34,7 @@ export function DGKRListLevel({
               src={thumbnailUrl}
               alt={`Thumbnail of ${demonlistLevel.name}`}
               className={styles.thumbnail}
+              fill
             />
           ) : (
             <div className={styles.thumbnailPlaceholder}>No Thumbnail</div>

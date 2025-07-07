@@ -47,6 +47,7 @@ export function UINavButton({
         </a>
       );
     }
+
     return (
       <Link className={clsx(styles.link, classList)} href={href}>
         {button}
