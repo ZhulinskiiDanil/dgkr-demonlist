@@ -138,7 +138,6 @@ function HeaderButtons() {
       {session?.user ? (
         <>
           <span className={styles.username}>{session.user.name}</span>
-          <hr className={styles.hr} data-vertical />
           <UIButton onClick={() => signOut()}>Выйти</UIButton>
         </>
       ) : (
