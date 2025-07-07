@@ -1,10 +1,13 @@
+import clsx from 'clsx';
 import styles from './DGKRListLevel.module.css';
 
-import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
 import type { DemonlistLevel, DGKRListLevel } from '@/shared/types/demonlist';
+
 import { useSession } from 'next-auth/react';
-import clsx from 'clsx';
+import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
+
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function DGKRListLevel({
   data,
@@ -27,7 +30,7 @@ export function DGKRListLevel({
       <div className={styles.row}>
         <div className={styles.thumbnailWrapper}>
           {thumbnailUrl ? (
-            <img
+            <Image
               src={thumbnailUrl}
               alt={`Thumbnail of ${demonlistLevel.name}`}
               className={styles.thumbnail}
