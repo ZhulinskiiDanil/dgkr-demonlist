@@ -203,8 +203,19 @@
   align-items: center;
   gap: 0.25em;
 
-  color: #ffb834;
   font-size: 0.85rem;
+}
+
+.victors li:nth-child(1) a {
+  color: #ffb834; /* Gold for top 1 */
+}
+
+.victors li:nth-child(2) a {
+  color: #c0c0c0; /* Silver for top 2 */
+}
+
+.victors li:nth-child(3) a {
+  color: #cd7f32; /* Bronze for top 3 */
 }
 
 .victors li a[href='#'] {
