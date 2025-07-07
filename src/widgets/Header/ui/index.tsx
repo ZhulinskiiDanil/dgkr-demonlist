@@ -39,6 +39,10 @@ export function Header() {
           />
         </div>
 
+        <hr className={styles.hr} data-vertical />
+
+        <DSServerLikeButton className={styles.likeServer} />
+
         <div className={styles.right}>
           {/* Desktop buttons */}
           <div className={styles.buttonsDesktop}>
@@ -131,10 +135,10 @@ function HeaderButtons() {
 
   return (
     <div className={styles.buttons}>
-      <DSServerLikeButton />
       {session?.user ? (
         <>
           <span className={styles.username}>{session.user.name}</span>
+          <hr className={styles.hr} data-vertical />
           <UIButton onClick={() => signOut()}>Выйти</UIButton>
         </>
       ) : (
