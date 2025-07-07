@@ -1,13 +1,16 @@
-import axios from 'axios';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await axios.get(
-      'https://api.demonlist.org/levels/classic?search=&levels_type=all&limit=0'
+    const response = await fetch(
+      'https://api.demonlist.org/levels/classic?search=&levels_type=all&limit=0',
+      {
+        next: { revalidate: 60 }, // Кэш на 60 сек
+      }
     );
+    const data = await response.json();
 
-    return NextResponse.json(response.data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Ошибка при получении данных:', error);
     return NextResponse.json(
