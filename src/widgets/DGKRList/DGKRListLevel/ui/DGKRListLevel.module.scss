@@ -20,6 +20,7 @@
     &::before {
       content: '';
       position: absolute;
+      z-index: 1;
       right: -1rem;
       bottom: -1rem;
       background: url('/GJ_completesIcon_001.png') no-repeat center;
