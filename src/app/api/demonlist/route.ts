@@ -5,7 +5,7 @@ export async function GET() {
     const response = await fetch(
       'https://api.demonlist.org/levels/classic?search=&levels_type=all&limit=0',
       {
-        next: { revalidate: 60 }, // Кэш на 60 сек
+        next: { revalidate: 60 * 60 * 2 }, // Кэш на 2 часа
       }
     );
     const data = await response.json();
