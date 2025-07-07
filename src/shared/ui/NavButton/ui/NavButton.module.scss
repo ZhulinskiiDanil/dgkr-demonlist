@@ -49,7 +49,9 @@ button.button {
   }
 
   @media (min-width: 768px) {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    &:not(.big) {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
   }
 }

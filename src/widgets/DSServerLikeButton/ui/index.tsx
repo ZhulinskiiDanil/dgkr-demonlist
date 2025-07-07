@@ -19,7 +19,7 @@ export default function DSServerLikeButton({
 }: React.ComponentProps<typeof UIButton> & {
   navButton?: boolean;
 }) {
-  const buttonLabel = 'Like Server';
+  const buttonLabel = 'Поднять Сервер';
 
   useEffect(() => {
     const loadScript = () => {

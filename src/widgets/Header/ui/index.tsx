@@ -69,10 +69,22 @@ export function Header() {
       </div>
 
       {/* Mobile menu */}
+      <HeaderNav opened={menuOpen} toggleMenu={toggleMenu} />
+    </header>
+  );
+}
+
+function HeaderNav({
+  opened = false,
+  toggleMenu,
+}: {
+  opened?: boolean;
+  toggleMenu?: () => void;
+}) {
+  return (
+    <>
       <div
-        className={`${styles.mobileMenu} ${
-          menuOpen ? styles.mobileMenuOpen : ''
-        }`}
+        className={`${styles.mobileMenu} ${opened ? styles.mobileMenuOpen : ''}`}
       >
         <div className={styles.menuHeader}>
           <Link href="https://discord.gg/z9pmtkHX9b" target="_blank">
@@ -99,8 +111,8 @@ export function Header() {
       </div>
 
       {/* Overlay */}
-      {menuOpen && <div className={styles.overlay} onClick={toggleMenu}></div>}
-    </header>
+      {opened && <div className={styles.overlay} onClick={toggleMenu}></div>}
+    </>
   );
 }
 
@@ -109,10 +121,21 @@ function HeaderNavButtons() {
 
   return (
     <div className={styles.buttons}>
+      <UINavButton href="https://discord.gg/z9pmtkHX9b" external fill big>
+        Присоедениться к серверу
+      </UINavButton>
+      <iframe
+        src="https://discord.com/widget?id=1391010207097683968&theme=dark"
+        width="100%"
+        height="100%"
+        style={{ borderRadius: '0.5rem', border: 'none' }}
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+      ></iframe>
+
+      <hr className={styles.hr} style={{ marginTop: 'auto' }} />
+
       {/* Like Server Button */}
       <DSServerLikeButton navButton fill />
-
-      <hr className={styles.hr} />
 
       {session?.user ? (
         <>
