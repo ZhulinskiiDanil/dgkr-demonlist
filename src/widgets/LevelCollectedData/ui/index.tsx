@@ -1,4 +1,4 @@
-import styles from './LevelCollectedData.module.css';
+import styles from './LevelCollectedData.module.scss';
 
 import { useState } from 'react';
 

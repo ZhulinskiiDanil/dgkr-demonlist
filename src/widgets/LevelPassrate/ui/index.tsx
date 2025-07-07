@@ -1,4 +1,4 @@
-import styles from './LevelPassrate.module.css';
+import styles from './LevelPassrate.module.scss';
 
 import { parsePassrateData } from '@/shared/utils/parsePassrateData';
 import { useMemo, useState } from 'react';

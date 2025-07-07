@@ -1,4 +1,4 @@
-import styles from './GridItem.module.css';
+import styles from './GridItem.module.scss';
 
 export const GridItem = ({
   title,

@@ -1,4 +1,4 @@
-import styles from './LevelRuns.module.css';
+import styles from './LevelRuns.module.scss';
 
 import { ProgressBar } from '@/shared/ui/ProgressBar/ui';
 

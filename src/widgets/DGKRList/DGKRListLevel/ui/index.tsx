@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import styles from './DGKRListLevel.module.css';
+import styles from './DGKRListLevel.module.scss';
 
 import type { DemonlistLevel, DGKRListLevel } from '@/shared/types/demonlist';
 

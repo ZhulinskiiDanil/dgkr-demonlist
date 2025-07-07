@@ -1,4 +1,4 @@
-import styles from './DGKRList.module.css';
+import styles from './DGKRList.module.scss';
 
 import { DGKRListLevel } from '../DGKRListLevel/ui';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';

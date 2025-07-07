@@ -1,10 +1,10 @@
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 
 import { useMemo } from 'react';
 
-import { interpolateColor } from '../../../utils/interpolateColor';
-import { parseFromZeroData } from '../../../utils/parseFromZeroData';
-import { parseNormalData } from '../../../utils/parseNormalData';
+import { interpolateColor } from '@/shared/utils/interpolateColor';
+import { parseFromZeroData } from '@/shared/utils/parseFromZeroData';
+import { parseNormalData } from '@/shared/utils/parseNormalData';
 
 export function ProgressBar({
   texts,
