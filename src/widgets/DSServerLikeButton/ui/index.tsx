@@ -35,7 +35,18 @@ export default function DSServerLikeButton({
     e.preventDefault();
     // Вызываем функцию like из внешнего скрипта
     if (typeof window !== 'undefined' && typeof window.like === 'function') {
-      window.like(e.currentTarget);
+      // Find the closest parent <a> element or use currentTarget if it's a link
+      let targetLink: HTMLElement | null = e.currentTarget;
+      if (!(targetLink instanceof HTMLAnchorElement)) {
+        targetLink = e.currentTarget.closest('a');
+      }
+
+      if (!targetLink) {
+        console.error('No link element found for like()');
+        return;
+      }
+
+      window.like(targetLink);
     } else {
       console.error('Функция like() недоступна');
     }
@@ -48,6 +59,7 @@ export default function DSServerLikeButton({
           href="https://discordserver.info/1391010207097683968/like"
           external
           onClick={(e) => {
+            e.preventDefault();
             handleLike(e);
             onClick?.(e);
           }}
@@ -60,6 +72,7 @@ export default function DSServerLikeButton({
           href="https://discordserver.info/1391010207097683968/like"
           external
           onClick={(e) => {
+            e.preventDefault();
             handleLike(e);
             onClick?.(e);
           }}
