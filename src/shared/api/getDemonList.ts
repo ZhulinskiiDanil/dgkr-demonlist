@@ -18,11 +18,11 @@ const getBaseUrl = () => {
 export async function getDemonList() {
   const response = await fetch(`${getBaseUrl()}/api/demonlist`);
   if (!response.ok) {
-    return [];
+    return getBaseUrl();
   }
   const json = await response.json();
   if (json?.data && Array.isArray(json.data)) {
     return json.data as DemonlistLevel[];
   }
-  return [];
+  return getBaseUrl();
 }
