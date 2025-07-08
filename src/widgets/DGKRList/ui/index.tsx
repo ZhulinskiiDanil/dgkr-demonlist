@@ -10,11 +10,7 @@ export function DGKRList() {
   const { data: demonlist } = useDemonlistQuery();
 
   function getDemonlistLevelById(id: string | number) {
-    return (
-      (Array.isArray(demonlist) ? demonlist : []).find(
-        (level) => level.level_id === id
-      ) || null
-    );
+    return demonlist.find((level) => level.level_id === id) || null;
   }
 
   // Sort levels by place

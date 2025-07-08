@@ -15,7 +15,7 @@ export default async function LevelPage({
   const { levelId, victorName } = await params;
   const demonlist = await getDemonList();
   const dgkrList = await getDGKRList();
-  const demonlistLevel = (Array.isArray(demonlist) ? demonlist : []).find(
+  const demonlistLevel = demonlist.find(
     (item) => item.level_id.toString() === levelId
   );
   const dgkrLevel = dgkrList.find(
