@@ -20,7 +20,7 @@ export type DemonlistLevel = {
 
 export type DGKRVictor = {
   discordTag: string; // минимальная видимая информация о Discord (например, username#1234)
-  demonlistNick: string; // ник на demonlist сайте
+  victorName: string; // ник на demonlist сайте
   percent: number; // процент прохождения (1-100)
   flag: string | null; // флаг, например, "verified", "unverified", "incomplete"
   videoUrl: string; // ссылка на видео прохождения

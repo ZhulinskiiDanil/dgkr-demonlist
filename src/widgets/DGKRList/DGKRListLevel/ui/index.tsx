@@ -24,7 +24,7 @@ export function DGKRListLevel({
   const isCompleted = data.victors.some(
     (victor) => victor.discordTag === username
   );
-  const linkToLevelnList = `/demonlist/${demonlistLevel.level_id}/${data.victors[0].demonlistNick}`;
+  const linkToLevelnList = `/demonlist/${demonlistLevel.level_id}/${data.victors[0].victorName}`;
 
   return (
     <li className={clsx(styles.level, isCompleted && styles.completed)}>
@@ -58,11 +58,11 @@ export function DGKRListLevel({
                   )}
                   {victor && (
                     <Link
-                      href={`/demonlist/${demonlistLevel.level_id}/${victor.demonlistNick}`}
+                      href={`/demonlist/${demonlistLevel.level_id}/${victor.victorName}`}
                     >
                       <span className={styles.place}>{idx + 1}</span>
                       <span className={styles.username}>
-                        {victor.demonlistNick}
+                        {victor.victorName}
                       </span>{' '}
                       <span className={styles.percent}>
                         ({victor.percent}%)

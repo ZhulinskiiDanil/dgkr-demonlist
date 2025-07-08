@@ -44,7 +44,7 @@ export const VideoLevelVictorCard: React.FC<VideoLevelVictorCardProps> = ({
       <Link href={href} className={styles.thumbnailWrapper}>
         <Image
           src={thumbnailUrl}
-          alt={`${victor.demonlistNick}'s video`}
+          alt={`${victor.victorName}'s video`}
           width={480}
           height={360}
           className={styles.thumbnail}
@@ -53,7 +53,7 @@ export const VideoLevelVictorCard: React.FC<VideoLevelVictorCardProps> = ({
       <div className={styles.info}>
         <Link href={href}>
           <div className={styles.nick}>
-            #{num} {victor.demonlistNick}
+            #{num} {victor.victorName}
           </div>
         </Link>
         <div className={styles.meta}>

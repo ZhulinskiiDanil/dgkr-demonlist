@@ -22,7 +22,7 @@ export default async function LevelPage({
     (item) => item.levelId.toString() === levelId
   );
   const victorIndex = dgkrLevel?.victors.findIndex(
-    (victor) => victor.demonlistNick === victorName
+    (victor) => victor.victorName === victorName
   );
   const selectedVictor =
     victorIndex !== undefined &&
@@ -59,8 +59,8 @@ export default async function LevelPage({
           <div className={styles.victors}>
             <p>Сейчас играет:</p>
             <VideoLevelVictorCard
-              key={selectedVictor.demonlistNick}
-              href={`/demonlist/${levelId}/${selectedVictor.demonlistNick}`}
+              key={selectedVictor.victorName}
+              href={`/demonlist/${levelId}/${selectedVictor.victorName}`}
               variant="secondary"
               victor={selectedVictor}
               num={victorIndex + 1}
@@ -70,8 +70,8 @@ export default async function LevelPage({
             {dgkrLevel.victors.map((victor, index) => {
               return (
                 <VideoLevelVictorCard
-                  key={victor.demonlistNick}
-                  href={`/demonlist/${levelId}/${victor.demonlistNick}`}
+                  key={victor.victorName}
+                  href={`/demonlist/${levelId}/${victor.victorName}`}
                   victor={victor}
                   num={index + 1}
                 />
