@@ -123,6 +123,9 @@ function HeaderNavButtons() {
 
   return (
     <div className={styles.buttons}>
+      <UINavButton href="/demonlist/add" fill big>
+        Add new victor
+      </UINavButton>
       <UINavButton href="https://discord.gg/z9pmtkHX9b" external fill big>
         Присоедениться к серверу
       </UINavButton>
