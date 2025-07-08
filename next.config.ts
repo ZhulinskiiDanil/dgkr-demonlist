@@ -2,7 +2,18 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['levelthumbs.prevter.me'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'levelthumbs.prevter.me',
+        pathname: '/**', // Allow all paths
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

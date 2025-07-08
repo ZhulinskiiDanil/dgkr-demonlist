@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import './globals.scss';
 
 import { Providers } from './providers';
+import { Header } from '@/widgets/Header/ui';
 
 export const metadata: Metadata = {
   title: 'DGKR Community / Official website',
@@ -21,7 +22,10 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );

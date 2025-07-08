@@ -1,3 +1,4 @@
+'use client';
 import styles from './DGKRList.module.scss';
 
 import { DGKRListLevel } from '../DGKRListLevel/ui';

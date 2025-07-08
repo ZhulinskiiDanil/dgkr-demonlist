@@ -1,0 +1,99 @@
+.card {
+  position: relative;
+  display: flex;
+
+  background: #1e1e1e;
+  border: 1px solid #333;
+
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.secondary {
+    background: #1e1e1e;
+  }
+
+  &[data-num='1'] {
+    .nick {
+      color: #ffb834;
+    }
+  }
+
+  &[data-num='2'] {
+    .nick {
+      color: #c0c0c0;
+    }
+  }
+
+  &[data-num='3'] {
+    .nick {
+      color: #eeb241;
+    }
+  }
+}
+
+.flag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  // margin: 0.75rem;
+  object-fit: contain;
+  border-radius: 0 0 0 0.25rem;
+  overflow: hidden;
+  object-position: left bottom;
+}
+
+.thumbnailWrapper {
+  flex-shrink: 0;
+  width: 50%;
+  max-width: 400px;
+  aspect-ratio: 16 / 9;
+  border-radius: inherit;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+
+  border-right: 1px solid transparent;
+  border-color: inherit;
+
+  .thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.875rem 0.5rem;
+  // background: red;
+  gap: 0.5rem;
+
+  .nick {
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .meta {
+    display: flex;
+    gap: 0.5rem;
+
+    font-size: 1.25rem;
+    color: #fff;
+
+    margin-top: auto;
+
+    .date {
+      color: #999;
+    }
+  }
+}

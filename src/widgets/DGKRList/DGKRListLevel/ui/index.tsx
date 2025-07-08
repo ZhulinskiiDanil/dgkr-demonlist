@@ -24,11 +24,12 @@ export function DGKRListLevel({
   const isCompleted = data.victors.some(
     (victor) => victor.discordTag === username
   );
+  const linkToLevelnList = `/demonlist/${demonlistLevel.level_id}/${data.victors[0].demonlistNick}`;
 
   return (
     <li className={clsx(styles.level, isCompleted && styles.completed)}>
       <div className={styles.row}>
-        <div className={styles.thumbnailWrapper}>
+        <Link href={linkToLevelnList} className={styles.thumbnailWrapper}>
           {thumbnailUrl ? (
             <Image
               src={thumbnailUrl}
@@ -39,7 +40,7 @@ export function DGKRListLevel({
           ) : (
             <div className={styles.thumbnailPlaceholder}>No Thumbnail</div>
           )}
-        </div>
+        </Link>
 
         <div className={styles.victors}>
           <h3>Victors – {data.victors.length}</h3>
@@ -57,9 +58,7 @@ export function DGKRListLevel({
                   )}
                   {victor && (
                     <Link
-                      href={victor.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={`/demonlist/${demonlistLevel.level_id}/${victor.demonlistNick}`}
                     >
                       <span className={styles.place}>{idx + 1}</span>
                       <span className={styles.username}>
@@ -76,7 +75,9 @@ export function DGKRListLevel({
         </div>
         <div className={styles.content}>
           <div className={styles.header}>
-            <h2 className={styles.title}>{demonlistLevel.name}</h2>
+            <Link href={linkToLevelnList}>
+              <h2 className={styles.title}>{demonlistLevel.name}</h2>
+            </Link>
             <div className={styles.places}>
               <span className={styles.importantPlace}>★ #{place}</span>
               <span className={styles.place}>#{demonlistLevel.place}</span>

@@ -29,15 +29,17 @@ export function Header() {
           />
         </Link>
 
-        <div className={styles.dgkrWrapper}>
-          <Image
-            alt="DGKR"
-            src="/logo - DGKR.png"
-            objectFit="contain"
-            className={styles.dgkr}
-            fill
-          />
-        </div>
+        <Link href="/">
+          <div className={styles.dgkrWrapper}>
+            <Image
+              alt="DGKR"
+              src="/logo - DGKR.png"
+              objectFit="contain"
+              className={styles.dgkr}
+              fill
+            />
+          </div>
+        </Link>
 
         <hr className={styles.hr} data-vertical />
 
