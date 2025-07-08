@@ -35,10 +35,7 @@ export default function LevelSendForm() {
     demonlist
       .filter((elm) => {
         if (levelId) {
-          return (
-            elm.level_id.toString().includes(levelId) ||
-            elm.name.includes(levelId)
-          );
+          return (JSON.stringify(elm) + `#${elm.place}`).includes(levelId);
         }
         {
           return false;
