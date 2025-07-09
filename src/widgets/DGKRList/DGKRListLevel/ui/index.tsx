@@ -4,6 +4,8 @@ import styles from './DGKRListLevel.module.scss';
 import type { DemonlistLevel, DGKRListLevel } from '@/shared/types/demonlist';
 
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { getYoutubeVideoId } from '@/shared/utils/getYoutubeVideoId';
 import { getLevelThumbnailById } from '@/shared/utils/getLevelThumbnailById';
 
 import Link from 'next/link';
@@ -19,23 +21,33 @@ export function DGKRListLevel({
   place: number;
 }) {
   const session = useSession();
-  const thumbnailUrl = getLevelThumbnailById(demonlistLevel.level_id);
+  const videoId = getYoutubeVideoId(demonlistLevel.video);
+  const youtubeThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const modeThumbnailUrl = getLevelThumbnailById(demonlistLevel.level_id);
   const username = session.data?.user?.name;
   const isCompleted = data.victors.some(
     (victor) => victor.discordTag === username
   );
   const linkToLevelnList = `/demonlist/${demonlistLevel.level_id}/${data.victors[0].victorName}`;
+  const [thumbnailUrl, setThumbnailUrl] = useState(modeThumbnailUrl);
 
   return (
     <li className={clsx(styles.level, isCompleted && styles.completed)}>
       <div className={styles.row}>
         <Link href={linkToLevelnList} className={styles.thumbnailWrapper}>
+          {/* youtubeThumbnail, thumbnailUrl */}
+          {thumbnailUrl}
           {thumbnailUrl ? (
             <Image
+              fill
               src={thumbnailUrl}
               alt={`Thumbnail of ${demonlistLevel.name}`}
               className={styles.thumbnail}
-              fill
+              onError={(e) => {
+                if (thumbnailUrl !== youtubeThumbnail) {
+                  setThumbnailUrl(youtubeThumbnail);
+                }
+              }}
             />
           ) : (
             <div className={styles.thumbnailPlaceholder}>No Thumbnail</div>
