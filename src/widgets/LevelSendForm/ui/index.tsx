@@ -1,6 +1,8 @@
 'use client';
+
 import _ from 'lodash';
 import styles from './LevelSendForm.module.scss';
+import clsx from 'clsx';
 
 import type {
   DemonlistLevel,
@@ -8,21 +10,31 @@ import type {
   DGKRVictor,
 } from '@/shared/types/demonlist';
 
+import { hasFlag } from 'country-flag-icons';
 import { useEffect, useState } from 'react';
 import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 
 import { UIButton } from '@/shared/ui/Button/ui';
-import clsx from 'clsx';
+
+export enum PanelVariant {
+  ADD_VICTOR = 'ADD_VICTOR',
+  CHANGE_FLAG = 'CHANGE_FLAG',
+}
 
 export default function LevelSendForm() {
   const { data: demonlist } = useDemonlistQuery();
   const { data: dgkrList } = useDGKRListQuery();
 
   // Управляемые состояния
+  const [panelVariant, setPanelVariant] = useState<PanelVariant>(
+    PanelVariant.ADD_VICTOR
+  );
+  const [flag, setFlag] = useState('');
   const [level, setLevel] = useState<DemonlistLevel | null>(null);
   const [levelId, setLevelId] = useState('');
   const [victorName, setVictorName] = useState('');
+  const [flagVictorName, setFlagVictorName] = useState('');
   const [discord, setDiscord] = useState('');
   const [youtube, setYouTube] = useState('');
   const [jsonList, setJsonList] = useState(
@@ -61,7 +73,7 @@ export default function LevelSendForm() {
     setJsonList(JSON.stringify(dgkrList, undefined, 2));
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleVictorSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // отменяем стандартный submit
     setError(''); // сбрасываем ошибку
 
@@ -159,6 +171,52 @@ export default function LevelSendForm() {
     saveDGKRList(newList);
   };
 
+  const handleFlagSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // отменяем стандартный submit
+    setError(''); // сбрасываем ошибку
+
+    // Простая валидация
+    if (!flagVictorName || !flag) {
+      setError('Пожалуйста, заполните все поля');
+      return;
+    }
+
+    let victor = null as DGKRVictor | null;
+
+    dgkrList.find((level) => {
+      const findedVictor = level.victors.find(
+        (victor) => victor.victorName === flagVictorName
+      );
+
+      if (findedVictor) {
+        victor = findedVictor;
+      }
+
+      return !!findedVictor;
+    });
+
+    if (!victor) {
+      setError(`Не удалось найти пользователя с ником "${flagVictorName}"`);
+      return;
+    }
+
+    if (!hasFlag(flag.toUpperCase()) && flag !== 'N/A') {
+      setError(`Не удалось найти флаг "${flag.toUpperCase()}"`);
+      return;
+    }
+
+    const newList: DGKRListLevel[] = JSON.parse(jsonList);
+    newList.forEach((level) => {
+      level.victors.forEach((victor) => {
+        if (victor.victorName === flagVictorName) {
+          victor.flag = flag === 'N/A' ? null : flag.toUpperCase(); // Обновляем флаг у flagVictorName
+        }
+      });
+    });
+
+    saveDGKRList(newList);
+  };
+
   useEffect(() => {
     const level = demonlist.find(
       (level) => level.level_id.toString() === levelId
@@ -175,13 +233,13 @@ export default function LevelSendForm() {
     setJsonList(JSON.stringify(dgkrList, undefined, 2));
   }, [dgkrList]);
 
-  return (
-    <div className={styles.formWrapper}>
+  const addVictorForm = (
+    <div className={styles.addVictor}>
       <form
         className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(e);
+          handleVictorSubmit(e);
         }}
       >
         <div>
@@ -248,6 +306,62 @@ export default function LevelSendForm() {
           </div>
         ))}
       </div>
+    </div>
+  );
+
+  const changeFlagForm = (
+    <div className={styles.changeFlag}>
+      <form
+        className={styles.form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleFlagSubmit(e);
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Victor name"
+          value={flagVictorName}
+          onChange={(e) => setFlagVictorName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Flag"
+          value={flag}
+          onChange={(e) => setFlag(e.target.value)}
+        />
+        {error && <p className={styles.error}>{error}</p>}
+        <UIButton className={styles.button} type="submit" fill big>
+          Создать новый лист
+        </UIButton>
+      </form>
+    </div>
+  );
+
+  return (
+    <div className={styles.formWrapper}>
+      <div className={styles.panelButtons}>
+        <UIButton
+          big
+          fill
+          onClick={() => setPanelVariant(PanelVariant.ADD_VICTOR)}
+        >
+          Add victor
+        </UIButton>
+        <UIButton
+          big
+          fill
+          onClick={() => setPanelVariant(PanelVariant.CHANGE_FLAG)}
+        >
+          Change flag
+        </UIButton>
+      </div>
+      {
+        {
+          [PanelVariant.ADD_VICTOR]: addVictorForm,
+          [PanelVariant.CHANGE_FLAG]: changeFlagForm,
+        }[panelVariant]
+      }
       <div className={styles.jsonWrapper}>
         <textarea
           value={jsonList}

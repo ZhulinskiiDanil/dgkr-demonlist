@@ -33,7 +33,7 @@ export const VideoLevelVictorCard: React.FC<VideoLevelVictorCardProps> = ({
     >
       {victor.flag && (
         <Image
-          src={`/country-flags/svg/${victor.flag}.svg`}
+          src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${victor.flag}.svg`}
           alt={victor.flag}
           width={64}
           height={32}
