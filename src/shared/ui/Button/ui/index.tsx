@@ -5,18 +5,20 @@ import type { JSX } from 'react';
 import Link from 'next/link';
 
 export function UIButton({
-  fill = false,
+  href,
+  target = '_self',
   big = false,
+  fill = false,
+  external = false,
   className,
   children,
-  href,
-  external = false,
   ...props
 }: JSX.IntrinsicElements['button'] & {
   big?: boolean;
   fill?: boolean;
   href?: string;
   external?: boolean;
+  target?: JSX.IntrinsicElements['a']['target'];
 }) {
   const classList = clsx(
     styles.button,
@@ -38,7 +40,7 @@ export function UIButton({
         <a
           href={href}
           className={clsx(styles.link, classList)}
-          target="_blank"
+          target={target}
           rel="noopener noreferrer"
         >
           {button}
@@ -46,7 +48,11 @@ export function UIButton({
       );
     }
     return (
-      <Link className={clsx(styles.link, classList)} href={href}>
+      <Link
+        className={clsx(styles.link, classList)}
+        href={href}
+        target={target}
+      >
         {button}
       </Link>
     );

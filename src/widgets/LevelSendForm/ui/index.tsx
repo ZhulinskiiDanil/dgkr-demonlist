@@ -381,6 +381,15 @@ export default function LevelSendForm() {
             Копировать новый лист
           </UIButton>
         </div>
+        <UIButton
+          big
+          fill
+          external
+          target="_blank"
+          href="https://gist.github.com/ZhulinskiiDanil/8133426c3ec239bbb1ce103f6401bb87/edit"
+        >
+          Перейти на gist
+        </UIButton>
       </div>
     </div>
   );
