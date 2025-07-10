@@ -34,7 +34,15 @@ export function DGKRListLevel({
   return (
     <li className={clsx(styles.level, isCompleted && styles.completed)}>
       <div className={styles.row}>
-        <Link href={linkToLevelnList} className={styles.thumbnailWrapper}>
+        <Link
+          href={linkToLevelnList}
+          className={styles.thumbnailWrapper}
+          style={
+            {
+              '--thumbnail-url': `url("${thumbnailUrl}")`,
+            } as React.CSSProperties
+          }
+        >
           {/* youtubeThumbnail, thumbnailUrl */}
           {thumbnailUrl}
           {thumbnailUrl ? (
