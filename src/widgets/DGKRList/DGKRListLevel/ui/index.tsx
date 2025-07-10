@@ -43,7 +43,7 @@ export function DGKRListLevel({
               src={thumbnailUrl}
               alt={`Thumbnail of ${demonlistLevel.name}`}
               className={styles.thumbnail}
-              onError={(e) => {
+              onError={() => {
                 if (thumbnailUrl !== youtubeThumbnail) {
                   setThumbnailUrl(youtubeThumbnail);
                 }

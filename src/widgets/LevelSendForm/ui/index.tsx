@@ -11,7 +11,8 @@ import type {
 } from '@/shared/types/demonlist';
 
 import { hasFlag } from 'country-flag-icons';
-import { useEffect, useState } from 'react';
+import { validateYoutubeVideo } from '@/shared/api/validateYoutubeVideo';
+import { useEffect, useMemo, useState } from 'react';
 import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 
@@ -26,10 +27,11 @@ export default function LevelSendForm() {
   const { data: demonlist } = useDemonlistQuery();
   const { data: dgkrList } = useDGKRListQuery();
 
-  // Управляемые состояния
   const [panelVariant, setPanelVariant] = useState<PanelVariant>(
     PanelVariant.ADD_VICTOR
   );
+
+  const [error, setError] = useState('');
   const [flag, setFlag] = useState('');
   const [level, setLevel] = useState<DemonlistLevel | null>(null);
   const [levelId, setLevelId] = useState('');
@@ -37,25 +39,37 @@ export default function LevelSendForm() {
   const [flagVictorName, setFlagVictorName] = useState('');
   const [discord, setDiscord] = useState('');
   const [youtube, setYouTube] = useState('');
+  const [isVideoValid, setIsVideoValid] = useState(false);
   const [jsonList, setJsonList] = useState(
     JSON.stringify(dgkrList, undefined, 2)
   );
+  const listMatches = useMemo(() => {
+    return _.uniqBy(
+      demonlist
+        .filter((elm) => {
+          if (levelId) {
+            return (JSON.stringify(elm) + `#${elm.place}`).includes(levelId);
+          }
+          {
+            return false;
+          }
+        })
+        .concat(demonlist),
+      (level) => level.level_id
+    ).slice(0, 5);
+  }, [demonlist, levelId]);
 
-  const [error, setError] = useState(''); // для ошибок
+  const debouncedValidate = _.debounce(async (url: string) => {
+    const notFoundErrorText = 'Видео не существует';
+    const result = await validateYoutubeVideo(url);
+    setIsVideoValid(result.valid);
 
-  const listMatches = _.uniqBy(
-    demonlist
-      .filter((elm) => {
-        if (levelId) {
-          return (JSON.stringify(elm) + `#${elm.place}`).includes(levelId);
-        }
-        {
-          return false;
-        }
-      }) // выбираем по ID
-      .concat(demonlist),
-    (level) => level.level_id
-  ).slice(0, 5);
+    if (!result.valid && url) {
+      setError(notFoundErrorText);
+    } else if (error === notFoundErrorText) {
+      setError('');
+    }
+  }, 500);
 
   function saveDGKRList(list: DGKRListLevel[]) {
     setJsonList(JSON.stringify(list, undefined, 2));
@@ -97,10 +111,12 @@ export default function LevelSendForm() {
     }
 
     // ✅ Validate YouTube link
-    const youtubeRegex =
-      /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}(&.*)?$/;
+    const youtubeUrl = payload.youtube.trim();
 
-    if (!youtubeRegex.test(payload.youtube)) {
+    const youtubeRegex =
+      /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]{11}(&.*)?$/;
+
+    if (!youtubeRegex.test(youtubeUrl)) {
       setError('Введите корректную ссылку на YouTube');
       return;
     }
@@ -108,7 +124,7 @@ export default function LevelSendForm() {
     const newVictor: DGKRVictor = {
       percent: 100,
       victorName,
-      videoUrl: youtube,
+      videoUrl: youtubeUrl,
       flag: null,
       discordTag: discord,
       addedAt: new Date().toISOString(),
@@ -217,6 +233,7 @@ export default function LevelSendForm() {
     saveDGKRList(newList);
   };
 
+  // Auto find level from input
   useEffect(() => {
     const level = demonlist.find(
       (level) => level.level_id.toString() === levelId
@@ -229,6 +246,44 @@ export default function LevelSendForm() {
     }
   }, [levelId]);
 
+  // If it's a Shorts or short link, convert to normal watch link
+  useEffect(() => {
+    let newYoutubeUrl = youtube.trim();
+
+    // https://www.youtube.com/shorts/SXaOufRuiJ8
+    const shortsRegex =
+      /^(https?:\/\/)?(www\.)?youtube\.com\/shorts\/([\w-]{11})(\?.*)?$/;
+    if (shortsRegex.test(newYoutubeUrl)) {
+      newYoutubeUrl = newYoutubeUrl.replace(
+        shortsRegex,
+        'https://www.youtube.com/watch?v=$3'
+      );
+    }
+
+    // https://youtu.be/aJP_x31Pp0k
+    const shortLinkRegex = /^(https?:\/\/)?youtu\.be\/([\w-]{11})(\?.*)?$/;
+    if (shortLinkRegex.test(newYoutubeUrl)) {
+      newYoutubeUrl = newYoutubeUrl.replace(
+        shortLinkRegex,
+        'https://www.youtube.com/watch?v=$2'
+      );
+    }
+
+    if (youtube !== newYoutubeUrl) {
+      setYouTube(newYoutubeUrl);
+    }
+  }, [youtube]);
+
+  // Validate video url
+  useEffect(() => {
+    setIsVideoValid(false);
+    debouncedValidate(youtube);
+
+    // cleanup debounce при размонтировании
+    return () => debouncedValidate.cancel();
+  }, [youtube, debouncedValidate]);
+
+  // First load dgkrList JSON.stringify
   useEffect(() => {
     setJsonList(JSON.stringify(dgkrList, undefined, 2));
   }, [dgkrList]);
@@ -278,8 +333,14 @@ export default function LevelSendForm() {
         />
         {error && <p className={styles.error}>{error}</p>}
         <div className={styles.buttons}>
-          <UIButton className={styles.button} type="submit" fill big>
-            Создать новый лист
+          <UIButton
+            className={styles.button}
+            type="submit"
+            disabled={!isVideoValid}
+            fill
+            big
+          >
+            Добавить в лист
           </UIButton>
           <UIButton className={styles.button} type="button" fill big>
             Очистить все поля
