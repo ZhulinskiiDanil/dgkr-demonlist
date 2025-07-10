@@ -59,17 +59,19 @@ export default function LevelSendForm() {
     ).slice(0, 5);
   }, [demonlist, levelId]);
 
-  const debouncedValidate = _.debounce(async (url: string) => {
-    const notFoundErrorText = 'Видео не существует';
-    const result = await validateYoutubeVideo(url);
-    setIsVideoValid(result.valid);
+  const debouncedValidate = useMemo(() => {
+    return _.debounce(async (url: string) => {
+      const notFoundErrorText = 'Видео не существует';
+      const result = await validateYoutubeVideo(url);
+      setIsVideoValid(result.valid);
 
-    if (!result.valid && url) {
-      setError(notFoundErrorText);
-    } else if (error === notFoundErrorText) {
-      setError('');
-    }
-  }, 500);
+      if (!result.valid && url) {
+        setError(notFoundErrorText);
+      } else if (error === notFoundErrorText) {
+        setError('');
+      }
+    }, 500);
+  }, [error]);
 
   function saveDGKRList(list: DGKRListLevel[]) {
     setJsonList(JSON.stringify(list, undefined, 2));
