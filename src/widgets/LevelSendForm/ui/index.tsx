@@ -270,6 +270,8 @@ export default function LevelSendForm() {
     }
 
     if (youtube !== newYoutubeUrl) {
+      console.debug('Set new youtube link');
+      console.debug({ youtube, newYoutubeUrl });
       setYouTube(newYoutubeUrl);
     }
   }, [youtube]);
@@ -279,7 +281,6 @@ export default function LevelSendForm() {
     setIsVideoValid(false);
     debouncedValidate(youtube);
 
-    // cleanup debounce при размонтировании
     return () => debouncedValidate.cancel();
   }, [youtube, debouncedValidate]);
 
