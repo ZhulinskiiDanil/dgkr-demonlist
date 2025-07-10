@@ -185,7 +185,6 @@ export default function LevelSendForm() {
         : level
     );
 
-    // console.log('✅ Обновлённый список уровней:', newList);
     saveDGKRList(newList);
   };
 
@@ -272,8 +271,6 @@ export default function LevelSendForm() {
     }
 
     if (youtube !== newYoutubeUrl) {
-      console.debug('Set new youtube link');
-      console.debug({ youtube, newYoutubeUrl });
       setYouTube(newYoutubeUrl);
     }
   }, [youtube]);
