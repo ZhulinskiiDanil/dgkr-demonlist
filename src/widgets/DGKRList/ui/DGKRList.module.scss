@@ -5,14 +5,15 @@
 
   .search {
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
+    margin-bottom: 0.5rem;
 
     .title {
       margin-left: 1rem;
 
-      font-family: 'Roboto Flex', sans-serif;
-      font-size: 1.75rem;
-      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 400;
 
       color: #fff;
       margin-bottom: 0.5rem;
@@ -25,7 +26,7 @@
       margin-top: 1.25rem;
       margin-left: 0.5rem;
 
-      font-family: 'Roboto Flex', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 1rem;
 
       color: #ccc;
@@ -37,17 +38,18 @@
     .searchInput {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1px solid #555;
+      background: #222;
+      border: 1px solid #333;
       border-radius: 999rem;
-      font-size: 1.25rem;
+      font-size: 1rem;
       transition:
         border-color 0.3s,
         box-shadow 0.3s;
 
       &:focus {
         outline: none;
-        border-color: #4a90e2;
-        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        border-color: #aaa;
+        box-shadow: 0 0 0 3px rgba(#888, 0.6);
       }
     }
   }

@@ -18,6 +18,36 @@ export function DGKRList() {
     return demonlist.find((level) => level.level_id === id) || null;
   }
 
+  function getItemsText(count: number) {
+    const pluralRules = new Intl.PluralRules('ru-RU');
+    const suffixes: Record<Intl.LDMLPluralRule, string> = {
+      one: 'элемент',
+      few: 'элемента',
+      many: 'элементов',
+      other: 'элемента',
+      two: 'элемента',
+      zero: 'элемент',
+    };
+
+    const rule = pluralRules.select(count);
+    return `${count} ${suffixes[rule]}`;
+  }
+
+  function getFoundText(count: number) {
+    const pluralRules = new Intl.PluralRules('ru-RU');
+    const suffixes: Record<Intl.LDMLPluralRule, string> = {
+      one: 'найден',
+      few: 'найдено',
+      many: 'найдено',
+      other: 'найдено',
+      two: 'найдено',
+      zero: 'найдено',
+    };
+
+    const rule = pluralRules.select(count);
+    return suffixes[rule];
+  }
+
   const parsedLevels = levelsList
     .map((level) => ({
       level,
@@ -77,7 +107,8 @@ export function DGKRList() {
         )}
         {query.length > 1 && filteredLevels.length > 0 && (
           <p className={styles.sub}>
-            По запросу "{query}" найдено {filteredLevels.length} элементов
+            По запросу "{query}" {getFoundText(filteredLevels.length)}{' '}
+            {getItemsText(filteredLevels.length)}
           </p>
         )}
       </div>
