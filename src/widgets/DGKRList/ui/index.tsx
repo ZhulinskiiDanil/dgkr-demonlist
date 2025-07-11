@@ -49,8 +49,9 @@ export function DGKRList() {
   }
 
   const parsedLevels = levelsList
-    .map((level) => ({
+    .map((level, index) => ({
       level,
+      place: index + 1,
       listmeta: demonlist.find(
         (demonlistLevel) => demonlistLevel.level_id === level.levelId
       ),
@@ -116,13 +117,13 @@ export function DGKRList() {
       </div>
 
       <ul className={styles.list}>
-        {filteredLevels.map((level, index) => {
+        {filteredLevels.map((level) => {
           return (
             <DGKRListLevel
               key={level.level.levelId}
               data={level.level}
               demonlistLevel={level.listmeta}
-              place={index + 1}
+              place={level.place}
             />
           );
         })}
