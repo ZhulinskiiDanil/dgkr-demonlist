@@ -75,13 +75,12 @@ export async function POST(req: Request) {
     const addToListUrl = `${origin}/demonlist/add?${queryParams}`;
 
     const payload = {
-      content: `🏆 Новый рекорд от **${victorName} / @${discordName}**`,
+      content: `## 🏆 Новый рекорд от **${victorName} / @${discordName}**\n**#${place} ${levelName}** by ${creator}\n[Добавить в лист](${addToListUrl})`,
       color: 0x1abc9c,
       embeds: [
         {
           title: 'Информация о рекорде',
           color: 65280,
-          description: `**#${place} ${levelName} by ${creator}**\n[Добавить в лист](${addToListUrl})`,
           fields: [
             {
               name: 'Level ID',
