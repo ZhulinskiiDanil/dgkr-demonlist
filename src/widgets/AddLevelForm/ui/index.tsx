@@ -1,8 +1,12 @@
 'use client';
 
 import _ from 'lodash';
-import styles from './LevelSendForm.module.scss';
 import clsx from 'clsx';
+import styles from './AddLevelForm.module.scss';
+import Cookies from 'js-cookie';
+
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import type {
   DemonlistLevel,
@@ -17,13 +21,18 @@ import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 
 import { UIButton } from '@/shared/ui/Button/ui';
+import { useSearchParams } from 'next/navigation';
+import { acceptLevelRequest } from '@/shared/api/acceptLevelRequest';
 
 export enum PanelVariant {
   ADD_VICTOR = 'ADD_VICTOR',
   CHANGE_FLAG = 'CHANGE_FLAG',
 }
 
-export default function LevelSendForm() {
+const MySwal = withReactContent(Swal);
+
+export default function AddLevelForm() {
+  const searchParams = useSearchParams();
   const { data: demonlist } = useDemonlistQuery();
   const { data: dgkrList } = useDGKRListQuery();
 
@@ -31,13 +40,14 @@ export default function LevelSendForm() {
     PanelVariant.ADD_VICTOR
   );
 
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [flag, setFlag] = useState('');
   const [level, setLevel] = useState<DemonlistLevel | null>(null);
   const [levelId, setLevelId] = useState('');
   const [victorName, setVictorName] = useState('');
   const [flagVictorName, setFlagVictorName] = useState('');
-  const [discord, setDiscord] = useState('');
+  const [discordName, setDiscordName] = useState('');
   const [youtube, setYouTube] = useState('');
   const [isVideoValid, setIsVideoValid] = useState(false);
   const [jsonList, setJsonList] = useState(
@@ -77,6 +87,44 @@ export default function LevelSendForm() {
     setJsonList(JSON.stringify(list, undefined, 2));
   }
 
+  const handleSetToken = async () => {
+    const { value: token } = await MySwal.fire({
+      title: 'Введите ключ модератора',
+      input: 'password',
+      text: 'Для отправки запроса требуется ключ модератора',
+      inputPlaceholder: 'Введите ключ модератора',
+      showCancelButton: true,
+      theme: 'dark',
+      confirmButtonText: 'Записать ключ модератора',
+      cancelButtonText: 'Отменить',
+      customClass: {
+        confirmButton: 'swal2-confirm-stretch',
+        cancelButton: 'swal2-cancel-stretch',
+        actions: 'swal2-stretch-buttons swal2-actions-padding',
+      },
+    });
+
+    if (token) {
+      // Установить куку на 7 дней
+      Cookies.set('moderatorToken', `Bearer ${token}`, {
+        expires: 7, // 7 дней
+        secure: true, // только по HTTPS
+        sameSite: 'strict', // защитит от CSRF
+        path: '/', // доступна на всём сайте
+      });
+
+      await MySwal.fire({
+        icon: 'success', // ✅ иконка успеха
+        title: 'Ключ сохранён',
+        text: 'Теперь вы можете отправлять запросы как модератор.',
+        confirmButtonText: 'Отлично!',
+        theme: 'dark',
+      });
+    }
+  };
+
+  const isTokenExists = () => !!Cookies.get('moderatorToken');
+
   function handleLevelClick(level: DemonlistLevel) {
     setLevelId(level.level_id.toString());
   }
@@ -94,7 +142,7 @@ export default function LevelSendForm() {
     setError(''); // сбрасываем ошибку
 
     // Простая валидация
-    if (!levelId || !victorName || !discord || !youtube) {
+    if (!levelId || !victorName || !discordName || !youtube) {
       setError('Пожалуйста, заполните все поля');
       return;
     }
@@ -103,7 +151,7 @@ export default function LevelSendForm() {
     const payload = {
       levelId,
       listName: victorName,
-      discord,
+      discord: discordName,
       youtube,
     };
 
@@ -128,11 +176,11 @@ export default function LevelSendForm() {
       victorName,
       videoUrl: youtubeUrl,
       flag: null,
-      discordTag: discord,
+      discordTag: discordName,
       addedAt: new Date().toISOString(),
     };
 
-    const dgkrListCopy = _.cloneDeep(dgkrList);
+    const dgkrListCopy: DGKRListLevel[] = JSON.parse(jsonList);
     let dgkrLevel = dgkrList.find(
       (level) => level.levelId.toString() === levelId
     );
@@ -152,13 +200,13 @@ export default function LevelSendForm() {
     }
 
     if (!dgkrLevel) {
-      setError('Не удалось создать уровень');
+      setError('Не удалось добавить уровень');
       return;
     }
 
     // ✅ Проверка на наличие такого победителя в этом уровне
     const isVictorExists = dgkrLevel.victors.some(
-      (v) => v.victorName === victorName || v.discordTag === discord
+      (v) => v.victorName === victorName || v.discordTag === discordName
     );
 
     if (isVictorExists) {
@@ -189,10 +237,10 @@ export default function LevelSendForm() {
   };
 
   const handleFlagSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // отменяем стандартный submit
-    setError(''); // сбрасываем ошибку
+    e.preventDefault();
+    setError('');
 
-    // Простая валидация
+    // ✅ Простая валидация
     if (!flagVictorName || !flag) {
       setError('Пожалуйста, заполните все поля');
       return;
@@ -226,13 +274,78 @@ export default function LevelSendForm() {
     newList.forEach((level) => {
       level.victors.forEach((victor) => {
         if (victor.victorName === flagVictorName) {
-          victor.flag = flag === 'N/A' ? null : flag.toUpperCase(); // Обновляем флаг у flagVictorName
+          victor.flag = flag === 'N/A' ? null : flag.toUpperCase();
         }
       });
     });
 
     saveDGKRList(newList);
   };
+
+  const handleAcceptLevelRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!isTokenExists()) {
+      await handleSetToken();
+    }
+
+    if (!isTokenExists()) {
+      setError('Отказано в доступе');
+      return;
+    }
+
+    // ✅ Простая валидация
+    if (!levelId || !victorName || !discordName || !youtube) {
+      setError('Пожалуйста, заполните все поля');
+      return;
+    }
+
+    // ✅ Validate YouTube link
+    const youtubeUrl = youtube.trim();
+
+    const youtubeRegex =
+      /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=[\w-]{11}(&.*)?$/;
+
+    if (!youtubeRegex.test(youtubeUrl)) {
+      setError('Введите корректную ссылку на YouTube');
+      return;
+    }
+
+    const dgkrLevel = dgkrList.find(
+      (level) => level.levelId.toString() === levelId
+    );
+
+    // ✅ Проверка на наличие такого победителя в этом уровне
+    const isVictorExists = dgkrLevel?.victors.some(
+      (v) => v.victorName === victorName || v.discordTag === discordName
+    );
+
+    if (isVictorExists) {
+      setError('Этот победитель уже есть на данном уровне');
+      return;
+    }
+
+    setLoading(true);
+    await acceptLevelRequest({
+      victorName,
+      discordName,
+      levelId,
+      youtubeUrl: youtube,
+    });
+    setLoading(false);
+  };
+
+  // Auto fill fields from query
+  useEffect(() => {
+    if (demonlist.length && dgkrList.length) {
+      setVictorName(searchParams.get('victorName') || '');
+      setDiscordName(searchParams.get('discordName') || '');
+      setYouTube(searchParams.get('youtubeUrl') || '');
+      setLevelId(searchParams.get('levelId') || '');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [demonlist, dgkrList]);
 
   // Auto find level from input
   useEffect(() => {
@@ -245,7 +358,7 @@ export default function LevelSendForm() {
     } else {
       setLevel(null);
     }
-  }, [levelId]);
+  }, [demonlist, levelId]);
 
   // If it's a Shorts or short link, convert to normal watch link
   useEffect(() => {
@@ -309,7 +422,7 @@ export default function LevelSendForm() {
         </div>
         <input
           type="text"
-          placeholder="Level ID"
+          placeholder="Level ID or Level name"
           value={levelId}
           onChange={(e) => setLevelId(e.target.value)}
         />
@@ -322,8 +435,8 @@ export default function LevelSendForm() {
         <input
           type="text"
           placeholder="Discord"
-          value={discord}
-          onChange={(e) => setDiscord(e.target.value)}
+          value={discordName}
+          onChange={(e) => setDiscordName(e.target.value)}
         />
         <input
           type="text"
@@ -334,16 +447,24 @@ export default function LevelSendForm() {
         {error && <p className={styles.error}>{error}</p>}
         <div className={styles.buttons}>
           <UIButton
-            className={styles.button}
             type="submit"
-            disabled={!isVideoValid}
+            className={styles.button}
+            disabled={!isVideoValid || loading}
+            title={isVideoValid ? '' : 'Неправильная ссылка видео'}
             fill
             big
           >
             Добавить в лист
           </UIButton>
-          <UIButton className={styles.button} type="button" fill big>
-            Очистить все поля
+          <UIButton
+            type="button"
+            className={styles.button}
+            disabled={!isVideoValid || loading}
+            title={isVideoValid ? '' : 'Неправильная ссылка видео'}
+            onClick={handleAcceptLevelRequest}
+            fill
+          >
+            (MOD) Принять реквест
           </UIButton>
         </div>
       </form>
@@ -405,6 +526,7 @@ export default function LevelSendForm() {
         <UIButton
           big
           fill
+          disabled={panelVariant === PanelVariant.ADD_VICTOR}
           onClick={() => setPanelVariant(PanelVariant.ADD_VICTOR)}
         >
           Add victor
@@ -412,6 +534,7 @@ export default function LevelSendForm() {
         <UIButton
           big
           fill
+          disabled={panelVariant === PanelVariant.CHANGE_FLAG}
           onClick={() => setPanelVariant(PanelVariant.CHANGE_FLAG)}
         >
           Change flag

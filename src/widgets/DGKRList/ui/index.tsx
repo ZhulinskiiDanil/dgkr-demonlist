@@ -103,11 +103,13 @@ export function DGKRList() {
           onChange={(e) => setQuery(e.target.value)}
         />
         {!filteredLevels.length && (
-          <p className={styles.sub}>По запросу "{query}" ничего найдено</p>
+          <p className={styles.sub}>
+            По запросу &quot;{query}&quot; ничего найдено
+          </p>
         )}
         {query.length > 1 && filteredLevels.length > 0 && (
           <p className={styles.sub}>
-            По запросу "{query}" {getFoundText(filteredLevels.length)}{' '}
+            По запросу &quot;{query}&quot; {getFoundText(filteredLevels.length)}{' '}
             {getItemsText(filteredLevels.length)}
           </p>
         )}
