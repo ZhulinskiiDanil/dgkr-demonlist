@@ -326,8 +326,16 @@ export default function AddLevelForm() {
       return;
     }
 
+    if (!level) {
+      setError("Ну удалось найти уровень в global demon list'е");
+      return;
+    }
+
     setLoading(true);
     await acceptLevelRequest({
+      place: level.place,
+      creator: level.creator,
+      levelName: level.name,
       victorName,
       discordName,
       levelId,

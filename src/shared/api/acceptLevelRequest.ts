@@ -1,6 +1,9 @@
 import Cookies from 'js-cookie';
 
 type LevelRequestPayload = {
+  place: number;
+  creator: string;
+  levelName: string;
   victorName: string;
   discordName: string;
   youtubeUrl: string;
@@ -8,12 +11,18 @@ type LevelRequestPayload = {
 };
 
 export async function acceptLevelRequest({
+  place,
+  creator,
+  levelName,
   victorName,
   discordName,
   youtubeUrl,
   levelId,
 }: LevelRequestPayload) {
   const payload = {
+    place,
+    creator,
+    levelName,
     victorName,
     discordName,
     youtubeUrl,

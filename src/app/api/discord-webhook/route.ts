@@ -2,6 +2,9 @@ import { getYoutubeVideoId } from '@/shared/utils/getYoutubeVideoId';
 import { NextResponse } from 'next/server';
 
 type WebhookRequestBody = {
+  place: number;
+  creator: string;
+  levelName: string;
   victorName: string;
   discordName: string;
   youtubeUrl: string;
@@ -33,12 +36,28 @@ export async function POST(req: Request) {
 
   try {
     const body: WebhookRequestBody = await req.json();
-    const { victorName, discordName, youtubeUrl, levelId } = body;
+    const {
+      place,
+      creator,
+      levelName,
+      victorName,
+      discordName,
+      youtubeUrl,
+      levelId,
+    } = body;
     const youtubeId = getYoutubeVideoId(youtubeUrl);
     const parsedYoutubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
     const thumbnail = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
 
-    if (!victorName || !discordName || !youtubeUrl || !levelId) {
+    if (
+      !place ||
+      !creator ||
+      !levelName ||
+      !victorName ||
+      !discordName ||
+      !youtubeUrl ||
+      !levelId
+    ) {
       return NextResponse.json(
         { error: 'Все поля обязательны' },
         { status: 400 }
@@ -62,18 +81,16 @@ export async function POST(req: Request) {
         {
           title: 'Информация о рекорде',
           color: 65280,
-          description: `[Добавить в лист](${addToListUrl})`,
+          description: `**#${place} ${levelName} by ${creator}**\n[Добавить в лист](${addToListUrl})`,
           fields: [
             {
               name: 'Level ID',
-              value: levelId || 'Не указано',
+              value: `[${levelId}](${addToListUrl})`,
               inline: false,
             },
             {
               name: 'YouTube',
-              value: parsedYoutubeUrl
-                ? `[Видео](${parsedYoutubeUrl})`
-                : 'Не указано',
+              value: `[Видео](${parsedYoutubeUrl})`,
               inline: false,
             },
           ],
