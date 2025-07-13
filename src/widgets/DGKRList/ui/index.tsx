@@ -51,7 +51,7 @@ export function DGKRList() {
   const parsedLevels = levelsList
     .map((level, index) => ({
       level,
-      place: index + 1,
+      place: -1,
       listmeta: demonlist.find(
         (demonlistLevel) => demonlistLevel.level_id === level.levelId
       ),
@@ -65,8 +65,8 @@ export function DGKRList() {
     );
 
   // Sort levels by place
-  const sortedLevels =
-    parsedLevels?.sort((a, b) => {
+  const sortedLevels = parsedLevels
+    .sort((a, b) => {
       const aLevel = getDemonlistLevelById(a.level.levelId);
       const bLevel = getDemonlistLevelById(b.level.levelId);
 
@@ -74,7 +74,11 @@ export function DGKRList() {
       const placeA = aLevel.place || 0;
       const placeB = bLevel.place || 0;
       return placeA - placeB;
-    }) || [];
+    })
+    .map((level, index) => ({
+      ...level,
+      place: index + 1,
+    }));
 
   // Настройки Fuse.js
   const fuse = new Fuse(sortedLevels, {
