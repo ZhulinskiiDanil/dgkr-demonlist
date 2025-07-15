@@ -49,7 +49,7 @@ export function DGKRList() {
   }
 
   const parsedLevels = levelsList
-    .map((level, index) => ({
+    .map((level) => ({
       level,
       place: -1,
       listmeta: demonlist.find(
