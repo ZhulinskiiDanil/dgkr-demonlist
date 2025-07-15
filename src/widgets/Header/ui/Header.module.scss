@@ -70,6 +70,7 @@
   }
 
   .button {
+    flex-shrink: 0;
     color: #aaa;
     font-size: 1.125rem;
     letter-spacing: 0.2px;
@@ -137,6 +138,10 @@
     height: 100%;
     gap: 0.5rem;
 
+    > a {
+      flex-shrink: 0;
+    }
+
     .button {
       padding: 0.5rem 1rem;
       background: #5865f2;
@@ -158,6 +163,7 @@
   }
 
   .username {
+    flex-shrink: 0;
     font-weight: bold;
     font-size: 0.875rem;
     color: #f1f1f1;

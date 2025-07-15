@@ -141,11 +141,8 @@ function HeaderNavButtons() {
 
   return (
     <div className={styles.buttons}>
-      <UINavButton href="/demonlist/add" fill big>
-        Add new victor
-      </UINavButton>
-      <UINavButton href="https://discord.gg/z9pmtkHX9b" external fill big>
-        Присоедениться к серверу
+      <UINavButton href="/users" fill onClick={() => signOut()}>
+        Рейтинг игроков
       </UINavButton>
       <iframe
         src="https://discord.com/widget?id=1391010207097683968&theme=dark"
@@ -159,6 +156,9 @@ function HeaderNavButtons() {
 
       {/* Like Server Button */}
       <DSServerLikeButton navButton fill />
+      <UINavButton href="https://discord.gg/z9pmtkHX9b" external fill big>
+        Присоедениться к серверу
+      </UINavButton>
 
       {session?.user ? (
         <>
@@ -168,8 +168,8 @@ function HeaderNavButtons() {
           </UINavButton>
         </>
       ) : (
-        <UINavButton fill variant="discord" onClick={() => signIn('discord')}>
-          Войти с Discord
+        <UINavButton variant="discord" fill onClick={() => signIn('discord')}>
+          Вход в аккаунт
         </UINavButton>
       )}
     </div>
@@ -187,7 +187,9 @@ function HeaderButtons() {
           <UIButton onClick={() => signOut()}>Выйти</UIButton>
         </>
       ) : (
-        <UIButton onClick={() => signIn('discord')}>Войти с Discord</UIButton>
+        <UIButton className={styles.button} onClick={() => signIn('discord')}>
+          Войти с Discord
+        </UIButton>
       )}
     </div>
   );
