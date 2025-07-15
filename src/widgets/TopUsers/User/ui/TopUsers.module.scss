@@ -1,0 +1,41 @@
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 1.125rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #333;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #333;
+  }
+
+  .rank {
+    object-fit: contain;
+  }
+
+  .place {
+    text-align: center;
+    width: 1rem;
+    font-weight: bold;
+  }
+
+  .username {
+    margin-right: auto;
+    font-weight: 500;
+  }
+
+  .discord {
+    opacity: 0.5;
+  }
+
+  .score {
+    color: #4fc3f7;
+  }
+}

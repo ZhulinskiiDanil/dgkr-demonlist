@@ -3,7 +3,7 @@ import styles from './page.module.scss';
 import { Suspense } from 'react';
 import AddLevelForm from '@/widgets/AddLevelForm/ui';
 
-export default function LevelPage() {
+export default function AddLevelPage() {
   return (
     <div className={styles.page}>
       <div className={styles.content}>

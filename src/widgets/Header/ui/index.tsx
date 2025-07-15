@@ -2,8 +2,9 @@
 
 import styles from './Header.module.scss';
 import { useState } from 'react';
-
+import { usePathname } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import DSServerLikeButton from '@/widgets/DSServerLikeButton/ui';
@@ -11,6 +12,7 @@ import { UIButton } from '@/shared/ui/Button/ui';
 import { UINavButton } from '@/shared/ui/NavButton/ui';
 
 export function Header() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -43,7 +45,23 @@ export function Header() {
 
         <hr className={styles.hr} data-vertical />
 
-        <DSServerLikeButton className={styles.likeServer} />
+        {pathname === '/' ? (
+          <>
+            <Image
+              src="/icons/rankIcon_top10.png"
+              width={28}
+              height={24}
+              alt="Rank"
+            />
+            <Link href="/users" className={styles.button}>
+              Рейтинг игроков
+            </Link>
+          </>
+        ) : (
+          <Link href="/" className={styles.button}>
+            На главную
+          </Link>
+        )}
 
         <div className={styles.right}>
           {/* Desktop buttons */}

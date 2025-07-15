@@ -69,8 +69,16 @@
     }
   }
 
-  .likeServer {
+  .button {
+    color: #aaa;
+    font-size: 1.125rem;
+    letter-spacing: 0.2px;
     margin-right: auto;
+    transition: 0.26s ease;
+
+    &:hover {
+      color: #fff;
+    }
 
     @media (max-width: 768px) {
       display: none;
