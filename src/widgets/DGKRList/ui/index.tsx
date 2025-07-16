@@ -1,4 +1,5 @@
 'use client';
+import clsx from 'clsx';
 import styles from './DGKRList.module.scss';
 
 import Fuse from 'fuse.js';
@@ -8,7 +9,10 @@ import { useState } from 'react';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
 
-export function DGKRList() {
+export function DGKRList({
+  className,
+  ...props
+}: React.JSX.IntrinsicElements['div']) {
   const { data: levelsList } = useDGKRListQuery();
   const { data: demonlist } = useDemonlistQuery();
 
@@ -97,7 +101,7 @@ export function DGKRList() {
     : sortedLevels;
 
   return (
-    <div className={styles.listWrapper}>
+    <div className={clsx(styles.listWrapper, className)} {...props}>
       <div className={styles.search}>
         <p className={styles.title}>Поиск по списку</p>
         <input

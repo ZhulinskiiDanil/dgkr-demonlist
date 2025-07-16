@@ -1,6 +1,53 @@
 .page {
   position: relative;
   min-height: 100svh;
+
+  .main {
+    z-index: 0;
+    position: relative;
+    width: 100%;
+    min-height: 100svh;
+    padding: 2rem 1rem;
+
+    .wrapper {
+      display: flex;
+      gap: 1rem;
+      position: relative;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      box-sizing: content-box;
+    }
+
+    .sidebar {
+      flex-shrink: 0;
+      width: 24rem;
+
+      .stickyWrapper {
+        position: sticky;
+        top: 6rem;
+      }
+
+      .title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        margin-left: 0.5rem;
+      }
+
+      .button {
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 75rem) {
+        display: none;
+      }
+    }
+
+    .list {
+      width: 100%;
+    }
+  }
 }
 
 .hr {
@@ -33,59 +80,6 @@
   );
 }
 
-.main {
-  z-index: 0;
-  position: relative;
-  width: 100%;
-  min-height: 100svh;
-  padding: 2rem 1rem;
-}
-
-.main .wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 1920px;
-  margin: 0 auto;
-  box-sizing: content-box;
-}
-
-.subtitle {
-  display: flex;
-  justify-self: center;
-  align-items: baseline;
-  width: fit-content;
-  gap: 0.2em;
-
-  margin-bottom: 2rem;
-
-  font-size: 2rem;
-  font-weight: 500;
-  font-variation-settings: 'slnt' -8;
-  color: #bbb;
-}
-
-.paragraph {
-  margin-left: 1rem;
-  font-family: 'Roboto Flex', sans-serif;
-  font-size: 1cqh;
-  font-weight: 600;
-  font-style: normal;
-  font-variation-settings:
-    'slnt' 0,
-    'GRAD' 0,
-    'XOPQ' 150,
-    'XTRA' 490,
-    'YOPQ' 80,
-    'YTAS' 650,
-    'YTDE' -150,
-    'YTFI' 650,
-    'YTLC' 550,
-    'YTUC' 750;
-  line-height: 1.3;
-  letter-spacing: 0;
-  color: #f1f1f1;
-}
-
 .hiddenInput {
   display: none;
 }
@@ -113,8 +107,8 @@
   width: 100%;
   display: flex;
   gap: 1.25rem;
-}
 
-.buttons > .button {
-  width: 100%;
+  > .button {
+    width: 100%;
+  }
 }
