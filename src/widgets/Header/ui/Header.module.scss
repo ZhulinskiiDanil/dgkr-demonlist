@@ -69,6 +69,14 @@
     }
   }
 
+  .rank {
+    object-fit: contain;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
   .button {
     flex-shrink: 0;
     color: #aaa;

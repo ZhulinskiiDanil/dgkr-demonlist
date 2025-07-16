@@ -48,6 +48,7 @@ export function Header() {
         {pathname === '/' ? (
           <>
             <Image
+              className={styles.rank}
               src="/icons/rankIcon_top10.png"
               width={28}
               height={24}
