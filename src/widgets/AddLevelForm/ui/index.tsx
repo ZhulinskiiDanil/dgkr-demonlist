@@ -234,6 +234,8 @@ export default function AddLevelForm() {
     );
 
     saveDGKRList(newList);
+    setYouTube('');
+    setLevelId('');
   };
 
   const handleFlagSubmit = (e: React.FormEvent) => {
@@ -342,6 +344,16 @@ export default function AddLevelForm() {
       youtubeUrl: youtube,
     });
     setLoading(false);
+
+    await MySwal.fire({
+      icon: 'success', // ✅ иконка успеха
+      title: 'Реквест отправлен',
+      confirmButtonText: 'Заебись',
+      theme: 'dark',
+    });
+
+    setYouTube('');
+    setLevelId('');
   };
 
   // Auto fill fields from query
