@@ -23,6 +23,7 @@ import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 import { UIButton } from '@/shared/ui/Button/ui';
 import { useSearchParams } from 'next/navigation';
 import { acceptLevelRequest } from '@/shared/api/acceptLevelRequest';
+import Fuse from 'fuse.js';
 
 export enum PanelVariant {
   ADD_VICTOR = 'ADD_VICTOR',
@@ -54,19 +55,19 @@ export default function AddLevelForm() {
     JSON.stringify(dgkrList, undefined, 2)
   );
   const listMatches = useMemo(() => {
-    return _.uniqBy(
-      demonlist
-        .filter((elm) => {
-          if (levelId) {
-            return (JSON.stringify(elm) + `#${elm.place}`).includes(levelId);
-          }
-          {
-            return false;
-          }
-        })
-        .concat(demonlist),
-      (level) => level.level_id
-    ).slice(0, 5);
+    const fuse = new Fuse(demonlist, {
+      keys: ['name', 'creator', 'verifier'],
+      threshold: 0.3, // чувствительность (меньше = строже)
+    });
+
+    const result = fuse
+      .search(levelId)
+      .slice(0, 5)
+      .map((elm) => elm.item)
+      .concat(demonlist)
+      .slice(0, 5);
+
+    return result;
   }, [demonlist, levelId]);
 
   const debouncedValidate = useMemo(() => {
