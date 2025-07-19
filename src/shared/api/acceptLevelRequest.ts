@@ -10,6 +10,12 @@ type LevelRequestPayload = {
   levelId: string;
 };
 
+type LevelRequestResponse = {
+  success: boolean;
+  isError: boolean;
+  message: string | null;
+};
+
 export async function acceptLevelRequest({
   place,
   creator,
@@ -18,7 +24,7 @@ export async function acceptLevelRequest({
   discordName,
   youtubeUrl,
   levelId,
-}: LevelRequestPayload) {
+}: LevelRequestPayload): Promise<LevelRequestResponse> {
   const payload = {
     place,
     creator,
@@ -34,7 +40,12 @@ export async function acceptLevelRequest({
 
     if (!moderatorToken) {
       console.error('❌ Ошибка при отправке:', 'Неверный токен');
-      return;
+
+      return {
+        success: false,
+        isError: false,
+        message: 'Неверный токен',
+      };
     }
 
     const response = await fetch('/api/discord-webhook', {
@@ -50,9 +61,26 @@ export async function acceptLevelRequest({
     if (!response.ok) {
       const error = await response.text();
       console.error('❌ Ошибка при отправке:', error);
-      return;
+
+      return {
+        success: false,
+        isError: true,
+        message: String(error),
+      };
     }
-  } catch (err) {
-    console.error('❌ Ошибка сети:', err);
+
+    return {
+      success: true,
+      isError: false,
+      message: null,
+    };
+  } catch (error) {
+    console.error('❌ Ошибка сети:', error);
+
+    return {
+      success: false,
+      isError: true,
+      message: String(error),
+    };
   }
 }

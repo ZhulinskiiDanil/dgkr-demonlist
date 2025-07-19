@@ -288,6 +288,8 @@ export default function AddLevelForm() {
     e.preventDefault();
     setError('');
 
+    console.log(isTokenExists());
+
     if (!isTokenExists()) {
       await handleSetToken();
     }
@@ -334,7 +336,7 @@ export default function AddLevelForm() {
     }
 
     setLoading(true);
-    await acceptLevelRequest({
+    const response = await acceptLevelRequest({
       place: level.place,
       creator: level.creator,
       levelName: level.name,
@@ -345,8 +347,25 @@ export default function AddLevelForm() {
     });
     setLoading(false);
 
+    if (response.isError && response.message) {
+      await MySwal.fire({
+        icon: 'error',
+        title: 'Ошибка запроса, ваш токен был сброшен',
+        text: `Ошибка: ${response.message}`,
+        confirmButtonText: 'Ну пиздец',
+        theme: 'dark',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Cookies.remove('moderatorToken');
+          console.log('moderatorToken удалён');
+        }
+      });
+
+      return;
+    }
+
     await MySwal.fire({
-      icon: 'success', // ✅ иконка успеха
+      icon: 'success',
       title: 'Реквест отправлен',
       confirmButtonText: 'Заебись',
       theme: 'dark',
