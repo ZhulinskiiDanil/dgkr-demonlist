@@ -26,6 +26,22 @@
     font-weight: bold;
   }
 
+  .flag {
+    $w: 1.5rem;
+
+    flex-shrink: 0;
+    position: relative;
+    width: $w;
+    height: $w / 1.5;
+    border-radius: 0.125rem;
+    overflow: hidden;
+    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
+
+    &__image {
+      object-fit: cover;
+    }
+  }
+
   .username {
     margin-right: auto;
     font-weight: 500;

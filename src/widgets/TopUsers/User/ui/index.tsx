@@ -1,6 +1,7 @@
 import styles from './TopUsers.module.scss';
 
 import type { TopUser } from '@/shared/types/users';
+
 import Image from 'next/image';
 
 export function TopUser({ user, place }: { user: TopUser; place: number }) {
@@ -16,6 +17,10 @@ export function TopUser({ user, place }: { user: TopUser; place: number }) {
         : place <= 3
           ? rankTop100
           : rankAll;
+  const flag = user.victor.flag
+    ? `https://purecatamphetamine.github.io/country-flag-icons/3x2/${user.victor.flag}.svg`
+    : '/icons/unknown_flag.png';
+
   return (
     <li className={styles.user}>
       <Image
@@ -26,6 +31,9 @@ export function TopUser({ user, place }: { user: TopUser; place: number }) {
         className={styles.rank}
       />
       <div className={styles.place}>{place}</div>
+      <div className={styles.flag}>
+        <Image className={styles.flag__image} src={flag} alt={flag} fill />
+      </div>
       <span className={styles.username}>{user.victor.victorName}</span>
       <span className={styles.discord}>@{user.victor.discordTag}</span>
       <b className={styles.score}>{user.meta.totalScore.toFixed(2)}</b>
