@@ -290,6 +290,21 @@ export function BlitzKrieg() {
         </div>
       </div>
       {error && <p className={styles.error}>{error}</p>}
+      {tags.length > 1 && (
+        <div className={styles.line}>
+          {tags.map((tag) => (
+            <div
+              key={tag}
+              className={styles.sp}
+              style={
+                {
+                  '--size': parseInt(tag.toString()) / 100,
+                } as React.CSSProperties
+              }
+            ></div>
+          ))}
+        </div>
+      )}
       <p className={styles.subtitle}>Стартовые позиции (по возрастанию)</p>
       <div className={styles.inputWrapper}>
         <TagInput

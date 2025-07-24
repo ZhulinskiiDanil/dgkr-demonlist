@@ -9,8 +9,6 @@
   align-items: flex-end;
   gap: 0.5rem;
 
-  margin-bottom: 1rem;
-
   .cell {
     display: flex;
     flex-direction: column;
@@ -104,4 +102,40 @@
 
 .rangesList li {
   margin-bottom: 0.25rem;
+}
+
+.line {
+  display: flex;
+  border-radius: 999rem;
+  border: 0.25rem solid #000;
+  gap: 0.25rem;
+  background: #000;
+
+  box-shadow: 0 0 4rem 0 rgba(#53e653, 0.2);
+
+  margin-bottom: 1rem;
+
+  .sp {
+    width: calc(var(--size) * 100%);
+    height: 1.5rem;
+    background: #53e653;
+
+    min-width: 1.5rem;
+
+    &:first-child {
+      border-radius: inherit;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      border-radius: inherit;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:nth-child(2n) {
+      background: #d3b403;
+    }
+  }
 }
