@@ -289,8 +289,6 @@ export default function AddLevelForm() {
     e.preventDefault();
     setError('');
 
-    console.log(isTokenExists());
-
     if (!isTokenExists()) {
       await handleSetToken();
     }
