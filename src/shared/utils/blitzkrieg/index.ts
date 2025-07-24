@@ -1,11 +1,13 @@
-export function generateStages(sps: number[]) {
+import type { Stage } from '@/shared/types/blitzkrieg';
+
+export function generateStages(sps: number[]): Stage[] {
   if (sps[0] !== 0) sps.unshift(0);
   if (sps[sps.length - 1] !== 100) sps.push(100);
 
   const stages = [];
 
   for (let i = 0; i < sps.length; i++) {
-    const stageRanges: { from: number; to: number }[] = [];
+    const stageRanges: Stage['ranges'] = [];
 
     const from1 = sps[sps.length - 1 - i];
     const to1 = 100;
@@ -13,6 +15,7 @@ export function generateStages(sps: number[]) {
       stageRanges.push({
         from: from1,
         to: to1,
+        checked: false,
       });
     }
 
@@ -23,6 +26,7 @@ export function generateStages(sps: number[]) {
         stageRanges.push({
           from: from2,
           to: to2,
+          checked: false,
         });
       }
     }

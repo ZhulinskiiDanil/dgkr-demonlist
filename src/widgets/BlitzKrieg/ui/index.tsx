@@ -2,10 +2,12 @@
 import _ from 'lodash';
 import styles from './BlitzKrieg.module.scss';
 
+import type { Stage } from '@/shared/types/blitzkrieg';
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { generateStages } from '@/shared/utils/blitzkrieg';
+import { generateStages as _generateStages } from '@/shared/utils/blitzkrieg';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TagInput } from '@/shared/ui/TagInput';
@@ -19,17 +21,21 @@ const MySwal = withReactContent(Swal);
 type BlitzKriegProfile = {
   type: 'tags';
   profileName: string;
-  data: (string | number)[];
+  data: {
+    tags: (string | number)[];
+    stages: Stage[];
+  };
 };
 
 function generateProfile(
+  profileName: string,
   tags: (string | number)[],
-  profileName: string
+  stages: Stage[]
 ): BlitzKriegProfile {
   return {
     type: 'tags',
     profileName,
-    data: tags,
+    data: { tags, stages },
   };
 }
 
@@ -46,10 +52,61 @@ export function BlitzKrieg() {
       .map((tag) => parseInt(tag.toString()))
       .filter((tag) => !isNaN(tag));
   }, [tags]);
+  const [stages, setStages] = useState(_generateStages(startPositions));
 
-  const stages = useMemo(() => {
-    return generateStages(startPositions);
-  }, [startPositions]);
+  const generateStages = (startPositions: number[]) => {
+    const generatedStages: Stage[] = _generateStages(startPositions);
+    const map = new Map<string, Stage['ranges']['0']>();
+
+    for (const stage of generatedStages) {
+      for (const range of stage.ranges) {
+        const key = `${stage.stage}-${range.from}-${range.to}`;
+        map.set(key, range);
+      }
+    }
+
+    stages.forEach((stage) => {
+      stage.ranges.forEach((oldRange) => {
+        const key = `${stage.stage}-${oldRange.from}-${oldRange.to}`;
+        const range = map.get(key);
+
+        if (range) {
+          range.checked = oldRange.checked;
+        }
+      });
+    });
+
+    return generatedStages;
+  };
+
+  const getAllProfilesFromStorage = useCallback((): BlitzKriegProfile[] => {
+    const profiles: BlitzKriegProfile[] = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('blitzkrieg-profile-')) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+
+        try {
+          const parsed = JSON.parse(raw);
+          if (
+            parsed &&
+            typeof parsed === 'object' &&
+            'type' in parsed &&
+            'profileName' in parsed &&
+            'data' in parsed
+          ) {
+            profiles.push(parsed as BlitzKriegProfile);
+          }
+        } catch {
+          // Игнорируем ошибки парсинга
+        }
+      }
+    }
+
+    return profiles;
+  }, []);
 
   async function handleEmptyLevelName() {
     const { value: levelName } = await MySwal.fire({
@@ -104,35 +161,6 @@ export function BlitzKrieg() {
     }
   }
 
-  const getAllProfilesFromStorage = useCallback((): BlitzKriegProfile[] => {
-    const profiles: BlitzKriegProfile[] = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('blitzkrieg-profile-')) {
-        const raw = localStorage.getItem(key);
-        if (!raw) continue;
-
-        try {
-          const parsed = JSON.parse(raw);
-          if (
-            parsed &&
-            typeof parsed === 'object' &&
-            'type' in parsed &&
-            'profileName' in parsed &&
-            'data' in parsed
-          ) {
-            profiles.push(parsed as BlitzKriegProfile);
-          }
-        } catch {
-          // Игнорируем ошибки парсинга
-        }
-      }
-    }
-
-    return profiles;
-  }, []);
-
   const updateProfilesList = () => {
     const allProfiles = getAllProfilesFromStorage();
     setProfiles(allProfiles);
@@ -147,7 +175,7 @@ export function BlitzKrieg() {
       return;
     }
 
-    const newProfile = generateProfile(tags, profileName);
+    const newProfile = generateProfile(profileName, tags, stages);
     localStorage.setItem(
       `blitzkrieg-profile-${profileName}`,
       JSON.stringify(newProfile)
@@ -185,25 +213,26 @@ export function BlitzKrieg() {
   };
 
   useEffect(() => {
+    setStages(generateStages(startPositions));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startPositions]);
+
+  useEffect(() => {
     updateProfilesList();
   }, []);
 
   useEffect(() => {
     // Just cause
-    if (tags) {
-      handleUpdateProfile();
-    }
+    handleUpdateProfile();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tags]);
+  }, [tags, stages]);
 
   useEffect(() => {
-    if (
-      profile &&
-      Array.isArray(profile.data) &&
-      !_.isEqual(profile.data, tags)
-    ) {
-      setTags(profile.data);
+    if (profile) {
+      setTags(profile.data.tags);
+      setStages(profile.data.stages);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -278,7 +307,7 @@ export function BlitzKrieg() {
         </p>
       </div>
       {tags.length > 0 && <>Теги: {tags.join(', ')}</>}
-      {tags.length > 0 && <Stages stages={stages} />}
+      {tags.length > 0 && <Stages stages={stages} onChange={setStages} />}
     </div>
   );
 }
