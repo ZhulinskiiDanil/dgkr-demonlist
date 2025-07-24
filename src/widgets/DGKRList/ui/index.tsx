@@ -8,6 +8,7 @@ import { DGKRListLevel } from '../DGKRListLevel/ui';
 import { useState } from 'react';
 import { useDGKRListQuery } from '@/shared/hooks/useDGKRListQuery';
 import { useDemonlistQuery } from '@/shared/hooks/useDemonlistQuery';
+import { UIInput } from '@/shared/ui/Input/ui';
 
 export function DGKRList({
   className,
@@ -104,10 +105,10 @@ export function DGKRList({
     <div className={clsx(styles.listWrapper, className)} {...props}>
       <div className={styles.search}>
         <p className={styles.title}>Поиск по списку</p>
-        <input
+        <UIInput
+          fill
           type="text"
           placeholder="Поиск по имени, создателю, вериферу..."
-          className={styles.searchInput} // добавь стили для инпута в DGKRList.module.scss
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
