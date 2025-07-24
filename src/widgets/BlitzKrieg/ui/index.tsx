@@ -231,8 +231,12 @@ export function BlitzKrieg() {
 
   useEffect(() => {
     if (profile) {
-      setTags(profile.data.tags);
-      setStages(profile.data.stages);
+      setTags((pre) =>
+        Array.isArray(profile.data.tags) ? profile.data.tags : pre
+      );
+      setStages((pre) =>
+        Array.isArray(profile.data.stages) ? profile.data.stages : pre
+      );
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
