@@ -10,6 +10,7 @@ import Image from 'next/image';
 import DSServerLikeButton from '@/widgets/DSServerLikeButton/ui';
 import { UIButton } from '@/shared/ui/Button/ui';
 import { UINavButton } from '@/shared/ui/NavButton/ui';
+import clsx from 'clsx';
 
 export function Header() {
   const pathname = usePathname();
@@ -20,7 +21,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.cw}>
-        <Link href="https://discord.gg/z9pmtkHX9b" target="_blank">
+        <Link href="/">
           <Image
             src="/logo.png"
             alt="Logo"
@@ -31,38 +32,32 @@ export function Header() {
           />
         </Link>
 
-        <Link href="/">
-          <div className={styles.dgkrWrapper}>
-            <Image
-              alt="DGKR"
-              src="/logo - DGKR.png"
-              objectFit="contain"
-              className={styles.dgkr}
-              fill
-            />
-          </div>
-        </Link>
-
-        <hr className={styles.hr} data-vertical />
-
-        {pathname === '/' ? (
-          <>
-            <Image
-              className={styles.rank}
-              src="/icons/rankIcon_top10.png"
-              width={28}
-              height={24}
-              alt="Rank"
-            />
-            <Link href="/users" className={styles.button}>
-              Рейтинг игроков
-            </Link>
-          </>
-        ) : (
-          <Link href="/" className={styles.button}>
-            На главную
+        <div className={styles.nav}>
+          <Link
+            href="/"
+            className={clsx(styles.link, pathname === '/' && styles.current)}
+          >
+            Главная
           </Link>
-        )}
+          <Link
+            href="/users"
+            className={clsx(
+              styles.link,
+              pathname === '/users' && styles.current
+            )}
+          >
+            Рейтинг
+          </Link>
+          <Link
+            href="/blitzkrieg"
+            className={clsx(
+              styles.link,
+              pathname === '/blitzkrieg' && styles.current
+            )}
+          >
+            Блицкриг
+          </Link>
+        </div>
 
         <div className={styles.right}>
           {/* Desktop buttons */}

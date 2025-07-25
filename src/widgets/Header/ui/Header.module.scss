@@ -13,13 +13,14 @@
 }
 
 .header {
+  z-index: 1;
   position: sticky;
   top: 0;
 
   padding: 0 1rem;
-  background: #000;
+  background: rgba(#000, 0.5);
   border-bottom: 1px solid #222;
-  z-index: 1;
+  backdrop-filter: blur(16px);
 
   .cw {
     display: flex;
@@ -42,15 +43,35 @@
     flex-shrink: 0;
   }
 
-  .title {
+  .nav {
     display: flex;
     align-items: center;
-    font-size: clamp(1.5rem, 5vw, 2.25rem);
-    font-weight: 600;
-    color: #f1f1f1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+    .link {
+      flex-shrink: 0;
+      color: #aaa;
+
+      font-size: 1rem;
+      font-weight: 300;
+
+      letter-spacing: 0.2px;
+      padding: 1rem 0.5rem;
+      margin-right: auto;
+      transition: 0.26s ease;
+
+      &.current {
+        color: #fff;
+        pointer-events: none;
+      }
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   .dgkrWrapper {
@@ -71,23 +92,6 @@
 
   .rank {
     object-fit: contain;
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-  .button {
-    flex-shrink: 0;
-    color: #aaa;
-    font-size: 1.125rem;
-    letter-spacing: 0.2px;
-    margin-right: auto;
-    transition: 0.26s ease;
-
-    &:hover {
-      color: #fff;
-    }
 
     @media (max-width: 768px) {
       display: none;
