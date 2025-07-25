@@ -169,16 +169,6 @@ export function BlitzKrieg() {
     }
   }
 
-  // function handleProfileNameChange(value: string) {
-  //   if (!value) {
-  //     setError('Придумайте название профиле чтобы сохранить его');
-  //   } else {
-  //     setError('');
-  //   }
-
-  //   setProfileName(value);
-  // }
-
   async function handleTagsChange(value: typeof tags) {
     let newProfileName = profileName;
 
@@ -290,16 +280,6 @@ export function BlitzKrieg() {
             fill
           />
         </div>
-        {/* <div className={styles.cell}>
-          <p className={styles.name}>Профиль</p>
-          <UIInput
-            fill
-            value={profileName}
-            className={styles.input}
-            onChange={(e) => handleProfileNameChange(e.target.value)}
-            placeholder="Название профиля"
-          />
-        </div> */}
         <div className={styles.cell}>
           <ContextMenu
             className={styles.contextMenu}

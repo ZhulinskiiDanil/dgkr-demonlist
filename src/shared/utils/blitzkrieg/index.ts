@@ -31,6 +31,7 @@ export function generateStages(sps: number[]): Stage[] {
     if (stageRanges.length > 0) {
       stages.push({
         stage: i + 1,
+        note: '',
         ranges: stageRanges,
       });
     }
