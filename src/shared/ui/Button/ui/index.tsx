@@ -3,9 +3,11 @@ import styles from './Button.module.scss';
 
 import type { JSX } from 'react';
 import Link from 'next/link';
+import type { FCIcon } from '@/shared/types/components';
 
 export function UIButton({
   href,
+  icon,
   target = '_self',
   big = false,
   fill = false,
@@ -14,12 +16,15 @@ export function UIButton({
   children,
   ...props
 }: JSX.IntrinsicElements['button'] & {
+  icon?: FCIcon;
   big?: boolean;
   fill?: boolean;
   href?: string;
   external?: boolean;
   target?: JSX.IntrinsicElements['a']['target'];
 }) {
+  const Icon = icon;
+
   const classList = clsx(
     styles.button,
     styles.primary,
@@ -30,6 +35,7 @@ export function UIButton({
 
   const button = (
     <button className={classList} {...props}>
+      {Icon && <Icon className={styles.icon} />}
       {children}
     </button>
   );

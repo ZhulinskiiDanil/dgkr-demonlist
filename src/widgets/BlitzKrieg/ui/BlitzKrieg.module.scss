@@ -22,20 +22,34 @@
     }
   }
 
-  .cell:has(.dropdown, .button) {
+  // .cell:has(.dropdown, .contextMenu) {
+  //   flex-shrink: 0;
+  // }
+
+  .cell:has(.contextMenu) {
     flex-shrink: 0;
   }
 
-  .cell:has(.input) {
+  // .cell:has(.input) {
+  .cell:has(.dropdown) {
     width: 100%;
-  }
-
-  .button {
-    flex-shrink: 0;
   }
 
   .dropdown {
     flex-shrink: 0;
+  }
+
+  .contextMenu {
+    .contextMenuList {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .button {
+        flex-shrink: 0;
+        text-wrap: nowrap;
+      }
+    }
   }
 }
 

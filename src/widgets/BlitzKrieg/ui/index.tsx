@@ -10,11 +10,13 @@ import withReactContent from 'sweetalert2-react-content';
 import { generateStages as _generateStages } from '@/shared/utils/blitzkrieg';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { TagInput } from '@/shared/ui/TagInput';
 import { Stages } from '../Stages/ui';
-import { UIInput } from '@/shared/ui/Input/ui';
+import { TagInput } from '@/shared/ui/TagInput';
+import { ContextMenu } from '@/shared/ui/ContextMenu/ui';
+// import { UIInput } from '@/shared/ui/Input/ui';
 import { UIButton } from '@/shared/ui/Button/ui';
 import { UIDropdown } from '@/shared/ui/UIDropdown/ui';
+import { ChevronDownIcon } from '@/shared/icons/ChevronDown';
 
 const MySwal = withReactContent(Swal);
 
@@ -46,7 +48,6 @@ export function BlitzKrieg() {
     return profiles.find((elm) => elm.profileName === profileName) || null;
   }, [profiles, profileName]);
   const [tags, setTags] = useState<(string | number)[]>([]);
-  const [error, setError] = useState('');
   const startPositions = useMemo(() => {
     return tags
       .map((tag) => parseInt(tag.toString()))
@@ -108,15 +109,15 @@ export function BlitzKrieg() {
     return profiles;
   }, []);
 
-  async function handleEmptyLevelName() {
-    const { value: levelName } = await MySwal.fire({
-      title: 'Название профиля',
+  async function handleCreateProfile() {
+    const { value: profileName } = await MySwal.fire({
+      title: 'Создание профиля',
       input: 'text',
-      text: 'Для примера можно написать название уровня',
+      inputLabel: 'Для примера можно написать название уровня',
       inputPlaceholder: 'Название профиля',
       showCancelButton: true,
       theme: 'dark',
-      confirmButtonText: 'Создать',
+      confirmButtonText: 'Создать профиль',
       cancelButtonText: 'Отмена',
       customClass: {
         confirmButton: 'swal2-confirm-stretch',
@@ -125,39 +126,69 @@ export function BlitzKrieg() {
       },
     });
 
-    if (levelName) {
-      setProfileName(levelName);
-    } else {
-      setError('Придумайте название профиле чтобы сохранить его');
+    if (profileName) {
+      setProfileName(profileName);
     }
 
     return {
-      levelName,
+      profileName,
     };
   }
 
-  function handleLevelNameChange(value: string) {
-    if (!value) {
-      setError('Придумайте название профиле чтобы сохранить его');
-    } else {
-      setError('');
-    }
+  async function handleEditProfile() {
+    const newProfile = _.cloneDeep(profile);
 
-    setProfileName(value);
+    if (newProfile) {
+      const { value: profileName } = await MySwal.fire({
+        title: 'Редактирование профиля',
+        input: 'text',
+        inputLabel: 'Название профиля',
+        inputPlaceholder: 'Название профиля',
+        inputValue: newProfile.profileName,
+        showCancelButton: true,
+        theme: 'dark',
+        confirmButtonText: 'Применить изменения',
+        cancelButtonText: 'Отмена',
+        customClass: {
+          confirmButton: 'swal2-confirm-stretch',
+          cancelButton: 'swal2-cancel-stretch',
+          actions: 'swal2-stretch-buttons swal2-actions-padding',
+        },
+      });
+
+      localStorage.removeItem(`blitzkrieg-profile-${newProfile.profileName}`);
+
+      newProfile.profileName = profileName;
+      localStorage.setItem(
+        `blitzkrieg-profile-${profileName}`,
+        JSON.stringify(newProfile)
+      );
+
+      setProfileName(profileName);
+      updateProfilesList();
+    }
   }
 
+  // function handleProfileNameChange(value: string) {
+  //   if (!value) {
+  //     setError('Придумайте название профиле чтобы сохранить его');
+  //   } else {
+  //     setError('');
+  //   }
+
+  //   setProfileName(value);
+  // }
+
   async function handleTagsChange(value: typeof tags) {
-    let newLevelName = profileName;
+    let newProfileName = profileName;
 
     if (!profileName) {
-      const { levelName: response } = await handleEmptyLevelName();
-      newLevelName = response;
+      const { profileName: response } = await handleCreateProfile();
+      newProfileName = response;
     }
 
-    if (newLevelName) {
+    if (newProfileName) {
       setTags(value);
-    } else {
-      setError('Придумайте название профиля');
     }
   }
 
@@ -246,7 +277,7 @@ export function BlitzKrieg() {
     <div className={styles.container}>
       <div className={styles.profileNameWrapper}>
         <div className={styles.cell}>
-          <p className={styles.name}>Список профилей</p>
+          <p className={styles.name}>Выбранный профиль</p>
           <UIDropdown<string>
             value={profileName}
             className={styles.dropdown}
@@ -256,53 +287,100 @@ export function BlitzKrieg() {
               value: profile.profileName,
             }))}
             placeholder="Выбрать"
+            fill
           />
         </div>
-        <div className={styles.cell}>
+        {/* <div className={styles.cell}>
           <p className={styles.name}>Профиль</p>
           <UIInput
             fill
             value={profileName}
             className={styles.input}
-            onChange={(e) => handleLevelNameChange(e.target.value)}
+            onChange={(e) => handleProfileNameChange(e.target.value)}
             placeholder="Название профиля"
           />
-        </div>
+        </div> */}
         <div className={styles.cell}>
-          {!profile && (
-            <UIButton
-              onClick={handleUpdateProfile}
-              className={styles.button}
-              big
-            >
-              Создать
-            </UIButton>
-          )}
-          {!!profile && (
-            <UIButton
-              onClick={handleDeleteProfile}
-              className={styles.button}
-              big
-            >
-              Удалить профиль
-            </UIButton>
-          )}
+          <ContextMenu
+            className={styles.contextMenu}
+            button={<UIButton icon={ChevronDownIcon} big />}
+          >
+            <div className={styles.contextMenuList}>
+              <UIButton
+                onClick={handleCreateProfile}
+                className={styles.button}
+                fill
+              >
+                Новый профиль
+              </UIButton>
+              {!!profile && (
+                <UIButton
+                  onClick={handleEditProfile}
+                  className={styles.button}
+                  fill
+                >
+                  Редактировать
+                </UIButton>
+              )}
+              {!!profile && (
+                <UIButton
+                  onClick={handleDeleteProfile}
+                  className={styles.button}
+                  fill
+                >
+                  Удалить профиль
+                </UIButton>
+              )}
+            </div>
+          </ContextMenu>
         </div>
       </div>
-      {error && <p className={styles.error}>{error}</p>}
       {tags.length > 1 && (
         <div className={styles.line}>
-          {tags.map((tag) => (
-            <div
-              key={tag}
-              className={styles.sp}
-              style={
-                {
-                  '--size': parseInt(tag.toString()) / 100,
-                } as React.CSSProperties
-              }
-            ></div>
-          ))}
+          {tags.map((tag, index) => {
+            const prevTag = tags[index - 1];
+            const prevPercent =
+              (!isNaN(parseInt(prevTag?.toString())) &&
+                parseInt(prevTag?.toString())) ||
+              0;
+            const currentPercent =
+              (!isNaN(parseInt(tag?.toString())) &&
+                parseInt(tag?.toString())) ||
+              prevPercent ||
+              0;
+            const diff = currentPercent - prevPercent;
+            const isLast = index + 1 === tags.length;
+
+            const element = (
+              <div
+                key={tag}
+                className={styles.sp}
+                style={
+                  {
+                    '--size': diff / 100,
+                  } as React.CSSProperties
+                }
+              ></div>
+            );
+            const last = (
+              <div
+                key={tag}
+                className={styles.sp}
+                style={
+                  {
+                    '--size': (100 - currentPercent) / 100,
+                  } as React.CSSProperties
+                }
+              ></div>
+            );
+
+            return (
+              <>
+                {element}
+                {isLast && last}
+              </>
+            );
+          })}
         </div>
       )}
       <p className={styles.subtitle}>Стартовые позиции (по возрастанию)</p>
