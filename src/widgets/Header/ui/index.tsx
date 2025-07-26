@@ -85,12 +85,31 @@ export function Header() {
       </div>
 
       {/* Mobile menu */}
-      <HeaderNav opened={menuOpen} toggleMenu={toggleMenu} />
+      <HeaderMobileMenu opened={menuOpen} toggleMenu={toggleMenu} />
     </header>
   );
 }
 
-function HeaderNav({
+function HeaderButtons() {
+  const { data: session } = useSession();
+
+  return (
+    <div className={styles.buttons}>
+      {session?.user ? (
+        <>
+          <span className={styles.username}>{session.user.name}</span>
+          <UIButton onClick={() => signOut()}>Выйти</UIButton>
+        </>
+      ) : (
+        <UIButton className={styles.button} onClick={() => signIn('discord')}>
+          Войти с Discord
+        </UIButton>
+      )}
+    </div>
+  );
+}
+
+function HeaderMobileMenu({
   opened = false,
   toggleMenu,
 }: {
@@ -99,31 +118,33 @@ function HeaderNav({
 }) {
   return (
     <>
-      <div
-        className={`${styles.mobileMenu} ${opened ? styles.mobileMenuOpen : ''}`}
-      >
-        <div className={styles.menuHeader}>
-          <Link href="https://discord.gg/z9pmtkHX9b" target="_blank">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              title="Join our Discord"
-              width={48}
-              height={48}
-              className={styles.logo}
-            />
-          </Link>
-          <div className={styles.dgkrWrapper}>
-            <Image
-              alt="DGKR"
-              src="/logo - DGKR.png"
-              objectFit="contain"
-              className={styles.dgkr}
-              fill
-            />
+      <div className={styles.mobileMenuWrapper}>
+        <div
+          className={`${styles.mobileMenu} ${opened ? styles.mobileMenuOpen : ''}`}
+        >
+          <div className={styles.menuHeader}>
+            <Link href="https://discord.gg/z9pmtkHX9b" target="_blank">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                title="Join our Discord"
+                width={48}
+                height={48}
+                className={styles.logo}
+              />
+            </Link>
+            <div className={styles.dgkrWrapper}>
+              <Image
+                alt="DGKR"
+                src="/logo - DGKR.png"
+                objectFit="contain"
+                className={styles.dgkr}
+                fill
+              />
+            </div>
           </div>
+          <HeaderMobileButtons />
         </div>
-        <HeaderNavButtons />
       </div>
 
       {/* Overlay */}
@@ -132,7 +153,7 @@ function HeaderNav({
   );
 }
 
-function HeaderNavButtons() {
+function HeaderMobileButtons() {
   const { data: session } = useSession();
 
   return (
@@ -167,25 +188,6 @@ function HeaderNavButtons() {
         <UINavButton variant="discord" fill onClick={() => signIn('discord')}>
           Вход в аккаунт
         </UINavButton>
-      )}
-    </div>
-  );
-}
-
-function HeaderButtons() {
-  const { data: session } = useSession();
-
-  return (
-    <div className={styles.buttons}>
-      {session?.user ? (
-        <>
-          <span className={styles.username}>{session.user.name}</span>
-          <UIButton onClick={() => signOut()}>Выйти</UIButton>
-        </>
-      ) : (
-        <UIButton className={styles.button} onClick={() => signIn('discord')}>
-          Войти с Discord
-        </UIButton>
       )}
     </div>
   );
