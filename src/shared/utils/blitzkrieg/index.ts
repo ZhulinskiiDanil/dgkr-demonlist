@@ -15,7 +15,7 @@ export function generateStages(sps: number[]): Stage[] {
     const key1 = `${from1}-${to1}`;
     if (from1 !== to1 && !seen.has(key1)) {
       seen.add(key1);
-      stageRanges.push({ from: from1, to: to1, checked: false });
+      stageRanges.push({ from: from1, to: to1, note: '', checked: false });
     }
 
     for (let j = sps.length - i - 1; j > 0; j--) {
@@ -24,7 +24,7 @@ export function generateStages(sps: number[]): Stage[] {
       const key2 = `${from2}-${to2}`;
       if (from2 !== to2 && !seen.has(key2)) {
         seen.add(key2);
-        stageRanges.push({ from: from2, to: to2, checked: false });
+        stageRanges.push({ from: from2, to: to2, note: '', checked: false });
       }
     }
 

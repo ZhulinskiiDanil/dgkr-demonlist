@@ -241,10 +241,11 @@ export function BlitzKrieg() {
 
   useEffect(() => {
     updateProfilesList();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // Just cause
     handleUpdateProfile();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
